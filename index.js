@@ -1,9 +1,15 @@
 require("dotenv").config();
+import Login from "./frontend/src/Components/login/Login";
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
+
 const port = process.env.PORT || 5000;
+
+app.get("/",(req,resp)=>{
+  resp.send(Login)
+})
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
