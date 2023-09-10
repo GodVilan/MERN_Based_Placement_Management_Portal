@@ -1,10 +1,10 @@
 import './App.css';
-import Stdlogin from '../../backend/model/StdLogin';
+import Login from './Components/login/Login.jsx';
 
 function App() {
   return (
     <div className="App">
-      
+      <Login/>
     </div>
   );
 }
