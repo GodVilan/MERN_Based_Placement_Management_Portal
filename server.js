@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.static(path.join(process.cwd() + "/front-end/build")));
 
 
-const port = process.env.PORT || 5010;
+const port = process.env.PORT || 3000;
 
 app.post('/', async (req, res) => {
     const { uid, password } = req.body;

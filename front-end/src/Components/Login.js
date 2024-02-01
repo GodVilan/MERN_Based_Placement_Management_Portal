@@ -13,7 +13,7 @@ function Login() {
   async function npage(e) {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5010/', {
+      const response = await fetch('http://localhost:3000/', {
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json',
