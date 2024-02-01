@@ -9,12 +9,17 @@ config();
 
 const app = express();
 app.use(cors());
+const options = {
+	extensions:['htm','html','css','js','ico','jpg','jpeg','png','svg','pdf'],
+	index:['index.html'],
+}
+
+app.use(express.static("frontend"));
 app.use(express.json());
+app.use(express.static("public",options));
 
 const port = process.env.PORT || 5010;
-process.env.NODE_ENV = 'production';
 
-console.log(process.env.NODE_ENV);
 
 // app.use(express.static('front-end/build'));
   
@@ -155,16 +160,16 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
   
-if (process.env.NODE_ENV === 'production') {
-    console.log(process.env.NODE_ENV);
-    app.use(express.static('front-end/build'));
+// if (process.env.NODE_ENV === 'production') {
+//     console.log(process.env.NODE_ENV);
+//     app.use(express.static('front-end/build'));
   
-    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
-    });
-}
+//     app.get('*', (req, res) => {
+//       res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
+//     });
+// }
 
-const uri = 'mongodb+srv://nsreddy24:nsr143@cluster0.y7n9kz1.mongodb.net/'; // replace with your MongoDB connection string
+const uri = process.env.MONGO_DB; // replace with your MongoDB connection string
 
 mongoose.connect(uri)
   .then(() => console.log('Database connected successfully'))
