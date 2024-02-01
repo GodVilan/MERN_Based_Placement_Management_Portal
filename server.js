@@ -4,12 +4,16 @@ import cors from "cors";
 import loginModel from "./back-end/models/loginModel.js";
 import skillModel from './back-end/models/skillModel.js';
 import achieveModel from './back-end/models/achieveModel.js';
+import path from "path";
 import { config } from "dotenv";
 config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.use(express.static(path.join(process.cwd() + "./front-end/build")));
+
 
 const port = process.env.PORT || 5010;
 
@@ -145,6 +149,10 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   } catch (e) {
     res.status(500).json('Error deleting achievement');
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(process.cwd() + "./front-end/build/index.html"));
 });
 
 const uri = process.env.MONGO_DB;
