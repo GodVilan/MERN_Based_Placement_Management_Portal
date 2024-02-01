@@ -10,14 +10,8 @@ config();
 
 const app = express();
 app.use(cors());
-const options = {
-	extensions:['htm','html','css','js','ico','jpg','jpeg','png','svg','pdf'],
-	index:['index.html'],
-}
-
-app.use(express.static("front-end"));
 app.use(express.json());
-
+app.use(express.static(process.cwd() + "./front-end/build"));
 
 const port = process.env.PORT || 5010;
 
