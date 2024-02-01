@@ -17,7 +17,6 @@ const options = {
 
 app.use(express.static("front-end"));
 app.use(express.json());
-app.use(express.static("./front-end/build",options));
 
 
 const port = process.env.PORT || 5010;
@@ -154,6 +153,10 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   } catch (e) {
     res.status(500).json('Error deleting achievement');
   }
+});
+
+app.get("/*", (request, response) => {
+  response.sendFile(process.cwd() + "/front-end/build/index.html");
 });
 
 const uri = process.env.MONGO_DB;
