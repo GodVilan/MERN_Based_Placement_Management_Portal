@@ -4,18 +4,15 @@ import cors from "cors";
 import loginModel from "./back-end/models/loginModel.js";
 import skillModel from './back-end/models/skillModel.js';
 import achieveModel from './back-end/models/achieveModel.js';
-import path, { join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import { config } from "dotenv";
 config();
 
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000" // frontend URI (ReactJS)
+}
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '/front-end/build')));
+app.use(cors(corsOptions));
 
 const port = process.env.PORT || 5010;
 
@@ -153,16 +150,6 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
-
-app.get("*", function(_, res) {
-  res.sendFile(
-    path.join(__dirname, "./front-end/build/index.html"),
-    function(err) {
-      res.status(500).send(err);
-    }
-  );
-});
-
 const uri = process.env.MONGO_DB;
 
 try {
@@ -177,3 +164,6 @@ try {
 catch(error){
 	console.log(error);
 }
+app.get("/", (req, res) => {
+  res.status(201).json({message: "Connected to Backend!"});
+});
