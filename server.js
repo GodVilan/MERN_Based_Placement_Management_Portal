@@ -4,13 +4,17 @@ import cors from "cors";
 import loginModel from "./back-end/models/loginModel.js";
 import skillModel from './back-end/models/skillModel.js';
 import achieveModel from './back-end/models/achieveModel.js';
-
+import { config } from "dotenv";
+config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const port = process.env.PORT || 5010;
+process.env.NODE_ENV = 'production';
+
+console.log(process.env.NODE_ENV);
 
 // app.use(express.static('front-end/build'));
   
