@@ -5,10 +5,14 @@ import loginModel from "./back-end/models/loginModel.js";
 import skillModel from './back-end/models/skillModel.js';
 import achieveModel from './back-end/models/achieveModel.js';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import { config } from "dotenv";
 config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 app.use(cors());
 app.use(express.json());
 
@@ -148,9 +152,9 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
-app.use(express.static(process.cwd() + "./front-end/build"));
+app.use(express.static(path.join(__dirname, '/front-end/build')));
 app.get("/*", (request, response) => {
-  response.sendFile(process.cwd() + "./front-end/build/index.html");
+  response.sendFile(path.join(__dirname, '/front-end/build/index.html'));
 });
 
 const uri = process.env.MONGO_DB;
