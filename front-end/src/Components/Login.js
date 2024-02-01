@@ -13,7 +13,7 @@ function Login() {
   async function npage(e) {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000', {
+      const response = await fetch('http://localhost:5010', {
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json',
@@ -28,7 +28,7 @@ function Login() {
         if(data === 'exist') {
           if(isAdmin) {
             if(uid === 'CollegeTPO' && password === 'College@TPO') {
-              navi('/Admin');
+              navi('/AdminPage');
             } else {
               setErrorMessage('Invalid Credentials');
             }

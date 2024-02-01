@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom'; 
 import Profile from './Components/Profile';
 import Login from './Components/Login';
-import Admin from './Components/Admin';
+import AdminPage from './Components/AdminPage';
 import AddSkills from './Components/AddSkills';
 import Certifications from './Components/Certifications';
 import Jobs from './Components/Jobs';
@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path = '/' element = {<Login/>}></Route>
         <Route path = '/Profile/:uid' element = {<Profile/>}></Route>
-        <Route path = '/Admin' element = {<Admin/>}></Route>
+        <Route path = '/AdminPage' element = {<AdminPage/>}></Route>
         <Route path = '/AddSkills/:uid' element={<AddSkills/>}></Route>
         <Route path = '/Achievements/:uid' element={<Achievements/>}></Route>
         <Route path = '/Certifications/:uid' element={<Certifications/>}></Route>
