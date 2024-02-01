@@ -11,7 +11,6 @@ config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(process.cwd() + "./front-end/build"));
 
 const port = process.env.PORT || 5010;
 
@@ -149,6 +148,7 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
+app.use(express.static(process.cwd() + "./front-end/build"));
 app.get("/*", (request, response) => {
   response.sendFile(process.cwd() + "./front-end/build/index.html");
 });
