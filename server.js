@@ -20,12 +20,6 @@ app.use(express.static("public",options));
 
 const port = process.env.PORT || 5010;
 
-
-// app.use(express.static('front-end/build'));
-  
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
-// });
 app.post('/', async (req, res) => {
     const { uid, password } = req.body;
 
@@ -159,17 +153,8 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
     res.status(500).json('Error deleting achievement');
   }
 });
-  
-// if (process.env.NODE_ENV === 'production') {
-//     console.log(process.env.NODE_ENV);
-//     app.use(express.static('front-end/build'));
-  
-//     app.get('*', (req, res) => {
-//       res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
-//     });
-// }
 
-const uri = process.env.MONGO_DB; // replace with your MongoDB connection string
+const uri = process.env.MONGO_DB;
 
 mongoose.connect(uri)
   .then(() => console.log('Database connected successfully'))
