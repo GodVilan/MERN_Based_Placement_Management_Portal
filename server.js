@@ -156,7 +156,7 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
 });
 
 app.get("/*", (request, response) => {
-  response.sendFile(process.cwd() + "/front-end/src/App.js");
+  response.sendFile(process.cwd() + "./front-end/build/index.html");
 });
 
 const uri = process.env.MONGO_DB;
