@@ -9,11 +9,15 @@ import { config } from "dotenv";
 config();
 
 const app = express();
-app.use(express.json());
+const options = {
+	extensions:['htm','html','css','js','ico','jpg','jpeg','png','svg','pdf'],
+	index:['index.html'],
+}
+
 app.use(cors());
-
-app.use(express.static(process.cwd() + "/front-end/build"));
-
+app.use(express.static("front-end"));
+app.use(express.json());
+app.use(express.static("build",options));
 
 const port = process.env.PORT || 5010;
 
@@ -151,9 +155,10 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
-app.get('/', function (req, res) {
-  res.sendFile(process.cwd() + "/front-end/build/index.html");
+app.get("/", function(req, res){
+	res.sendFile(process.cwd()+"/front-end/build/index.html");
 });
+
 
 const uri = process.env.MONGO_DB;
 
