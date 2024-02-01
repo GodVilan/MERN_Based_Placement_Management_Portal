@@ -4,6 +4,7 @@ import cors from "cors";
 import loginModel from "./back-end/models/loginModel.js";
 import skillModel from './back-end/models/skillModel.js';
 import achieveModel from './back-end/models/achieveModel.js';
+import path from 'path';
 import { config } from "dotenv";
 config();
 
@@ -14,9 +15,10 @@ const options = {
 	index:['index.html'],
 }
 
-app.use(express.static("frontend"));
+app.use(express.static("front-end"));
 app.use(express.json());
-app.use(express.static("public",options));
+app.use(express.static("./front-end/build",options));
+
 
 const port = process.env.PORT || 5010;
 

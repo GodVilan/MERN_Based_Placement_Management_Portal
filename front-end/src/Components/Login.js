@@ -86,11 +86,11 @@ function Login() {
           <form onSubmit={npage}>
             <div className="form-group">
               <label htmlFor="uid">User ID</label>
-              <input type="text" className="form-control" id="uid" value={uid} onChange={(e) => setuid(e.target.value)} />
+              <input type="text" className="form-control" id="id" value={uid} onChange={(e) => setuid(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="pwd">Password</label>
-              <input type="password" className="form-control" id="pwd" value={password} onChange={(e) => setpassword(e.target.value)} />
+              <input type="password" className="form-control" id="pawd" value={password} onChange={(e) => setpassword(e.target.value)} />
             </div><br/>
             <button type="submit" className="btn btn-primary">Login</button>
           </form>

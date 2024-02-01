@@ -1,9 +1,12 @@
-
+import React, { useState, useEffect } from 'react';
+import Header from './Header';
+import { useParams } from 'react-router-dom';
 
 function Jobs() {
+    const {uid} = useParams();
     return (
         <div>
-            <h1>Jobs!!</h1>
+            <Header uid={uid} />
         </div>
 );
 }

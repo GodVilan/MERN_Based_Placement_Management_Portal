@@ -1,9 +1,12 @@
-
+import React, { useState, useEffect } from 'react';
+import Header from './Header';
+import { useParams } from 'react-router-dom';
 
 function Problems() {
+    const {uid} = useParams();
     return (
         <div>
-            <h1>Problems!</h1>
+            <Header uid={uid} />
         </div>
 );
 }
