@@ -8,11 +8,8 @@ import { config } from "dotenv";
 config();
 
 const app = express();
-const corsOptions = {
-  origin: "http://localhost:3000" // frontend URI (ReactJS)
-}
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 
 const port = process.env.PORT || 5010;
 
@@ -164,6 +161,3 @@ try {
 catch(error){
 	console.log(error);
 }
-app.get("/", (req, res) => {
-  res.status(201).json({message: "Connected to Backend!"});
-});
