@@ -158,10 +158,15 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
 
 const uri = process.env.MONGO_DB;
 
-mongoose.connect(uri)
-  .then(() => console.log('Database connected successfully'))
-  .catch(err => console.error('Database connection error:', err));
-
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+try {
+	mongoose.set('strictQuery', true);
+	mongoose.connect(uri);
+	console.log("DB Connected");
+	app.listen(port, function(){
+		console.log("Server running on http://localhost:"+port);
+		console.log(`Server running on http://localhost:${port}`);
+	});
+}
+catch(error){
+	console.log(error);
+}
