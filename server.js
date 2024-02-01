@@ -11,11 +11,12 @@ app.use(cors());
 app.use(express.json());
 
 const port = process.env.PORT || 5010;
-const options = {
-	extensions:['htm','html','css','js','ico','jpg','jpeg','png','svg','pdf'],
-	index:['index.html'],
-}
 
+// app.use(express.static('front-end/build'));
+  
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
+// });
 app.post('/', async (req, res) => {
     const { uid, password } = req.body;
 
@@ -151,10 +152,11 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
 });
   
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('client/build'));
+    console.log(process.env.NODE_ENV);
+    app.use(express.static('front-end/build'));
   
     app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+      res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'));
     });
 }
 
