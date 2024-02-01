@@ -4,7 +4,7 @@ import cors from "cors";
 import loginModel from "./back-end/models/loginModel.js";
 import skillModel from './back-end/models/skillModel.js';
 import achieveModel from './back-end/models/achieveModel.js';
-import path from 'path';
+import path, { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { config } from "dotenv";
@@ -15,6 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '/front-end/build')));
 
 const port = process.env.PORT || 5010;
 
@@ -152,9 +153,14 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
-app.use(express.static(path.join(__dirname, '/front-end/build')));
-app.get("/*", (request, response) => {
-  response.sendFile(path.join(__dirname, '/front-end/build/index.html'));
+
+app.get("*", function(_, res) {
+  res.sendFile(
+    path.join(__dirname, "./front-end/build/index.html"),
+    function(err) {
+      res.status(500).send(err);
+    }
+  );
 });
 
 const uri = process.env.MONGO_DB;
