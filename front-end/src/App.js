@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom'; 
 import Profile from './Components/Profile';
 import Login from './Components/Login';
@@ -12,7 +13,7 @@ import './App.css';
 import Achievements from './Components/Achievements';
 
 function App() {
-  const [uid, setUid] = useState(null);
+  // const [uid, setUid] = useState(null);
   return (
     <div className='App'>
       <Routes>

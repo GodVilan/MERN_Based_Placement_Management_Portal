@@ -31,7 +31,7 @@ function Home({ uid }) {
     };
     fetchAchievements();
 
-  }, []);
+  }, [uid]);
 
   if (!student) {
     return <div>Loading...</div>;
