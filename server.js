@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static(path.join(process.cwd() + "/front-end/build")));
+app.use(express.static(path.join(process.cwd(), 'build')));
 
 
 const port = process.env.PORT || 5010;
@@ -151,8 +151,8 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(process.cwd() + "/front-end/build/index.html"));
+app.get('/', function (req, res) {
+  res.sendFile(path.join(process.cwd(), 'build', 'index.html'));
 });
 
 const uri = process.env.MONGO_DB;
