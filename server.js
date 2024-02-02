@@ -9,15 +9,15 @@ import { config } from "dotenv";
 config();
 
 const app = express();
-const options = {
-	extensions:['map','json','html','css','js','ico','jpg','jpeg','png','svg','pdf'],
-	index:['index.html'],
-}
 
-app.use(cors());
-app.use(express.static("front-end"));
+app.use(cors(
+  {
+    origin : ["https://deploy-mern-1whq.vercel.app"],
+    methods : ["POST", "GET"],
+    credentials: true
+  }
+));
 app.use(express.json());
-app.use(express.static("build",options));
 
 const port = process.env.PORT || 5010;
 
@@ -154,11 +154,6 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
     res.status(500).json('Error deleting achievement');
   }
 });
-
-app.get("*", function(req, res){
-	res.sendFile(process.cwd()+"/front-end/build/index.html");
-});
-
 
 const uri = process.env.MONGO_DB;
 
