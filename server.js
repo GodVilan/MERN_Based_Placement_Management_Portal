@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 const corsOptions = {
-  origin: 'https://placement-management-portal.vercel.app', // replace with your deployed site URL
+  origin: 'https://placement-management-portal.vercel.app',
   credentials: true,
 }
 app.use(cors(corsOptions));
