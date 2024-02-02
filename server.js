@@ -10,7 +10,7 @@ config();
 
 const app = express();
 const options = {
-	extensions:['json','html','css','js','ico','jpg','jpeg','png','svg','pdf'],
+	extensions:['map','json','html','css','js','ico','jpg','jpeg','png','svg','pdf'],
 	index:['index.html'],
 }
 
