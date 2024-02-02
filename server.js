@@ -155,7 +155,7 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
-app.get("/", function(req, res){
+app.get("*", function(req, res){
 	res.sendFile(process.cwd()+"/front-end/build/index.html");
 });
 
