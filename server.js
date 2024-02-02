@@ -11,6 +11,12 @@ config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+const corsOptions = {
+  origin: 'https://placement-management-portal.vercel.app', // replace with your deployed site URL
+  credentials: true,
+}
+app.use(cors(corsOptions));
+
 
 const port = process.env.PORT || 5010;
 
@@ -148,17 +154,17 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV === "production") {
-    const path = require("path");
-    app.use(express.static(path.resolve(__dirname, 'client', 'build')));
-    app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'),function (err) {
-            if(err) {
-                res.status(500).send(err)
-            }
-        });
-    })
-}
+// if (process.env.NODE_ENV === "production") {
+//     const path = require("path");
+//     app.use(express.static(path.resolve(__dirname, 'client', 'build')));
+//     app.get("*", (req, res) => {
+//         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'),function (err) {
+//             if(err) {
+//                 res.status(500).send(err)
+//             }
+//         });
+//     })
+// }
 
 
 const uri = process.env.MONGO_DB;
