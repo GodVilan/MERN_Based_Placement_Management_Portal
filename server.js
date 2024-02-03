@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 const corsOptions = {
   origin: 'https://placement-management-portal.vercel.app',
+  methods: ["POST", "GET", "DELETE"],
   credentials: true,
 }
 app.use(cors(corsOptions));
