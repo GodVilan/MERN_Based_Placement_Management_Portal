@@ -13,7 +13,7 @@ const app = express();
 app.use(cors(
   {
     origin : ["https://placement-portal-black.vercel.app"],
-    methods : ["POST", "GET"],
+    methods : ["POST", "GET", "PUT", "DELETE"],
     credentials: true
   }
 ));
