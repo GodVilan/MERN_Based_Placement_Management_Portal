@@ -26,7 +26,6 @@ app.get("*", async => (req, res) => {
 const port = process.env.PORT || 5010;
 
 app.post('/', async (req, res) => {
-      req.setTimeout(1000);
     const { uid, password } = req.body;
 
     try {
