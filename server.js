@@ -9,15 +9,13 @@ import { config } from "dotenv";
 config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
-const corsOptions = {
+app.use(cors({
   origin: 'https://placement-management-portal.vercel.app',
-  methods: ["POST", "GET", "DELETE"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
-}
-app.use(cors(corsOptions));
-app.get("*", async (req, res) => {
+}));
+app.get('/, async (req, res) => {
 	res.json("Welcome!!");
 });
 
