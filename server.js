@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 
 const port = process.env.PORT || 5010;
 
-app.post('/', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { uid, password } = req.body;
 
     try {
@@ -165,6 +165,9 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
 //         });
 //     })
 // }
+app.get("/", async (req, res) => {
+	res.json("Welcome!!");
+});
 
 
 const uri = process.env.MONGO_DB;
