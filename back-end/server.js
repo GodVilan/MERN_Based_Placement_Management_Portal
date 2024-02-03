@@ -1,25 +1,27 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import loginModel from "./back-end/models/loginModel.js";
-import skillModel from './back-end/models/skillModel.js';
-import achieveModel from './back-end/models/achieveModel.js';
+import loginModel from "./models/loginModel.js";
+import skillModel from './models/skillModel.js';
+import achieveModel from './models/achieveModel.js';
 import path from "path";
 import { config } from "dotenv";
 config();
 
 const app = express();
 
-app.use(cors(
-  {
-    origin : ["https://placement-management-portal.vercel.app/"],
-    methods : ["POST", "GET"],
-    credentials: true
-  }
-));
 app.use(express.json());
+app.use(cors({
+  origin: 'https://placement-management-portal.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 const port = process.env.PORT || 5010;
+
+app.get('/', async (req, res) => {
+  res.json("WELCOME");
+});
 
 app.post('/', async (req, res) => {
     const { uid, password } = req.body;
@@ -154,6 +156,18 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
     res.status(500).json('Error deleting achievement');
   }
 });
+
+if (process.env.NODE_ENV === "production") {
+  const path = require("path");
+  app.use(express.static(path.resolve(__dirname, 'front-end', 'build')));
+  app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'front-end', 'build', 'index.html'),function (err) {
+          if(err) {
+              res.status(500).send(err)
+          }
+      });
+  })
+}
 
 const uri = process.env.MONGO_DB;
 
