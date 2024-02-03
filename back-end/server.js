@@ -19,6 +19,10 @@ app.use(cors(
 ));
 app.use(express.json());
 
+app.get('/', async => (req, res) => {
+    res.json("Welcome");
+});
+
 const port = process.env.PORT || 5010;
 
 app.post('/', async (req, res) => {
