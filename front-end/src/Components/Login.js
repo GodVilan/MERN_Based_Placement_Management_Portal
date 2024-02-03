@@ -13,7 +13,7 @@ function Login() {
   async function npage(e) {
     e.preventDefault();
     try {
-      const response = await fetch('https://placements-management-portal.vercel.app', {
+      const response = await fetch('https://mern-based-placement-management-portal.vercel.app', {
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json',
