@@ -1,9 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import loginModel from "./back-end/models/loginModel.js";
-import skillModel from './back-end/models/skillModel.js';
-import achieveModel from './back-end/models/achieveModel.js';
+import loginModel from "./models/loginModel.js";
+import skillModel from './models/skillModel.js';
+import achieveModel from './models/achieveModel.js';
 import path from "path";
 import { config } from "dotenv";
 config();
