@@ -12,7 +12,7 @@ const app = express();
 
 app.use(cors(
   {
-    origin : ["https://placement-management-portal.vercel.app/"],
+    origin : ["https://placement-portal-black.vercel.app"],
     methods : ["POST", "GET"],
     credentials: true
   }
