@@ -17,13 +17,13 @@ const corsOptions = {
   credentials: true,
 }
 app.use(cors(corsOptions));
-app.get("/", async (req, res) => {
+app.get("*", async (req, res) => {
 	res.json("Welcome!!");
 });
 
 const port = process.env.PORT || 5010;
 
-app.post('/Login', async (req, res) => {
+app.post('/', async (req, res) => {
     const { uid, password } = req.body;
 
     try {
