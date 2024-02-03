@@ -15,7 +15,6 @@ function Login() {
     try {
       const response = await fetch('https://placements-management-portal.vercel.app/login', {
         method : 'POST',
-        mode : 'cors',
         headers : {
           'Content-Type' : 'application/json',
         },
