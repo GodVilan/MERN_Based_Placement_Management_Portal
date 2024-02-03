@@ -23,7 +23,7 @@ app.get("/", async (req, res) => {
 
 const port = process.env.PORT || 5010;
 
-app.post('/login', async (req, res) => {
+app.post('/Login', async (req, res) => {
     const { uid, password } = req.body;
 
     try {
