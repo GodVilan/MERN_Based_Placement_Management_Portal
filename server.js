@@ -17,7 +17,9 @@ const corsOptions = {
   credentials: true,
 }
 app.use(cors(corsOptions));
-
+app.get("/", async (req, res) => {
+	res.json("Welcome!!");
+});
 
 const port = process.env.PORT || 5010;
 
@@ -166,9 +168,6 @@ app.delete('/Achievements/delete-achievement/:uid', async (req, res) => {
 //         });
 //     })
 // }
-app.get("/", async (req, res) => {
-	res.json("Welcome!!");
-});
 
 
 const uri = process.env.MONGO_DB;
