@@ -17,7 +17,7 @@ function App() {
   return (
     <div className='App'>
       <Routes>
-        <Route path = '/Login' element = {<Login/>}></Route>
+        <Route path = '/' element = {<Login/>}></Route>
         <Route path = '/Profile/:uid' element = {<Profile/>}></Route>
         <Route path = '/AdminPage' element = {<AdminPage/>}></Route>
         <Route path = '/AddSkills/:uid' element={<AddSkills/>}></Route>
