@@ -16,10 +16,6 @@
     "server.js": {
       "runtime": "edge",
       "maxDuration": 30
-    },
-    "*.js": {
-      "runtime": "edge",
-      "maxDuration": 30
     }
   }
 }
