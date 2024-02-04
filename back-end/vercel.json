@@ -12,10 +12,10 @@
     }
   ],
   "functions": {
-    "/server.js": {
+    "server.js": {
       "maxDuration": 30
     },
-    "/*.js": {
+    "*.js": {
       "maxDuration": 30
     }
   }
