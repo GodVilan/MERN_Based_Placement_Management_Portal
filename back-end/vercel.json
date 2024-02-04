@@ -12,7 +12,7 @@
     }
   ],
   "functions": {
-    "/server.js": {
+    "back-end/server.js": {
       "maxDuration": 60
     }
   }
