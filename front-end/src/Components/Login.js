@@ -13,7 +13,7 @@ function Login() {
   async function npage(e) {
     e.preventDefault();
     try {
-      const response = await fetch('https://placements-management-portal.vercel.app', {
+      const response = await fetch('http://localhost:5010', {
         method : 'POST',
         headers : {
           'Content-Type' : 'application/json',
@@ -61,13 +61,12 @@ function Login() {
   return (
     <div className='login-container'>
       <div className="login-header">
-        <h1>CMR College of Engineering and Technology</h1>
-        <h2>Welcome to the placement management portal</h2>
+        <h1><strong>Welcome To College Placement Management Portal</strong></h1>
       </div>
       <div className="login-card">
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
         <div className={`logincard-body ${isAdmin ? 'd-none' : ''}`}>
-          <h3 className="logincard-title">Student Login</h3>
+          <h3 className="logincard-title"><strong>Student Login</strong></h3>
           <form onSubmit={npage}>
             <div className="form-group">
               <label htmlFor="uid">User ID</label>
@@ -82,7 +81,7 @@ function Login() {
           <button onClick={switchForm} className="btn btn-secondary">Switch to Admin Login</button>
         </div>
         <div className={`logincard-body ${isAdmin ? '' : 'd-none'}`}>
-          <h3 className="loginard-title">Admin Login</h3>
+          <h3 className="loginard-title"><strong>Admin Login</strong></h3>
           <form onSubmit={npage}>
             <div className="form-group">
               <label htmlFor="uid">User ID</label>

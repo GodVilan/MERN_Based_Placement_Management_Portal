@@ -8,14 +8,14 @@
     display: flex;
     flex-direction: column;
   }
-  
   .login-container {
     width: 1500px;
   }
   
   .login-header {
+    margin-top: 70px;
     text-align: center;
-    height: 200px;
+    height: 150px;
     padding: 20px; 
     width: 100%;
   }

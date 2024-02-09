@@ -11,7 +11,7 @@ const AdminHeader = () => {
         <Link to={`/StudentDetails`} className="nav-link"><strong>View Student Details</strong></Link>
         <Link to={`/Leaderboard`} className="nav-link"><strong>Leaderboard</strong></Link>
         <Link to={`/StudentInterests`} className="nav-link"><strong>View Student Interests</strong></Link>
-        <Link to={`/Companies`} className="nav-link"><strong>View Companies</strong></Link>
+        <Link to={`/ViewCompanies`} className="nav-link"><strong>View Companies</strong></Link>
         <Link to={`/AddCompanies`} className="nav-link"><strong>Add Companies</strong></Link>
       </Nav>
       <Navbar.Collapse className="nav-bar">
@@ -23,7 +23,7 @@ const AdminHeader = () => {
           <Dropdown drop='left'>
             <Dropdown.Toggle className='profile-icon' as={Image} src='/Male.jpg' roundedCircle width="30" height="30" />
 
-            <Dropdown.Menu alignLeft = {true} className='drop-menu'>
+            <Dropdown.Menu className='drop-menu'>
               <Dropdown.Item  className="custom-item logout-button"  href="/">Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

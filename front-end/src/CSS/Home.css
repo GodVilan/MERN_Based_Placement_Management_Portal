@@ -8,7 +8,7 @@
   }
   
   .mb-4 {
-    margin-top: 50px;
+    margin-top: 50px !important;
     max-width: 400px;
     border-color: black;
   }
@@ -20,7 +20,7 @@
     max-height: 400px;
     overflow-y: auto;
   }
-  .container {
+  .Container {
     display: flex;
     flex-direction: column;
     justify-content: center;

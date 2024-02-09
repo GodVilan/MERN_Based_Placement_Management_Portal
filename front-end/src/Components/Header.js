@@ -13,9 +13,10 @@ const Header = ({ uid }) => {
         <Link to={`/Profile/${uid}`} className="nav-link"><strong>Home</strong></Link>
         <Link to={`/AddSkills/${uid}`} className="nav-link"><strong>Skills</strong></Link>
         <Link to={`/Achievements/${uid}`} className="nav-link"><strong>Achievements</strong></Link>
-        <Link to={`/Certifications/${uid}`} className="nav-link"><strong>My Certifications</strong></Link>
+        <Link to={`/AddCertifications/${uid}`} className="nav-link"><strong>My Certifications</strong></Link>
+        <Link to={`/UploadResume/${uid}`} className="nav-link"><strong>My Resume</strong></Link>
         <Link to={`/Jobs/${uid}`} className="nav-link"><strong>View Job Opportunities</strong></Link>
-        <Link to={`/Problems/${uid}`} className="nav-link"><strong>Problems</strong></Link>
+        <Link to={`/ProblemSolving/${uid}`} className="nav-link"><strong>Problems</strong></Link>
         <Link to={`/Leaderboard/${uid}`} className="nav-link"><strong>Leaderboard</strong></Link>
       </Nav>
       <Navbar.Collapse className="nav-bar">
@@ -27,7 +28,7 @@ const Header = ({ uid }) => {
           <Dropdown drop='left'>
             <Dropdown.Toggle className='profile-icon' as={Image} src={student.Image} roundedCircle width="30" height="30" />
 
-            <Dropdown.Menu alignLeft = {true} className='drop-menu'>
+            <Dropdown.Menu className='drop-menu'>
               <Dropdown.Item  className="custom-item logout-button"  href="/">Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

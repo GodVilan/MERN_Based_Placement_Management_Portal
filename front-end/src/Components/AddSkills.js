@@ -72,8 +72,8 @@ const AddSkills = () => {
   return (
     <div>
       <Header uid={uid} />
-      <h1>Add Skills To Know How Much Skilled You Are</h1>
-      <Container className='container'>
+      <h1 style={{marginTop : "20px"}}>Add Skills To Know How Much Skilled You Are</h1>
+      <Container className='skill-container'>
         <Row className="justify-content-md-center" md = {2}>
           <Col className='auto'>
             <Card className="card">

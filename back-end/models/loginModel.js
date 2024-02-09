@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 var loginSchema = new mongoose.Schema({
-    uid:String,
+    uid:{ type: String, unique: true },
     name:String,
     password:String
   });

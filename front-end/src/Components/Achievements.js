@@ -72,8 +72,8 @@ const Achievements = () => {
   return (
     <div>
       <Header uid={uid} />
-      <h1>Mention Your Achievements</h1>
-      <Container className='container'>
+      <h1 style={{marginTop : "20px"}}>Mention Your Achievements</h1>
+      <Container className='achieve-container'>
         <Row className="justify-content-md-center" md = {2}>
           <Col className='auto'>
             <Card className="card">
