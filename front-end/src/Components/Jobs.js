@@ -4,6 +4,13 @@ import Header from './Header';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Modal, Tab, Tabs, InputGroup, FormControl } from 'react-bootstrap';
 import '../CSS/Jobs.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faClock, faCheckCircle, faTimesCircle);
 
 function Jobs() {
     const { uid } = useParams();
@@ -80,15 +87,14 @@ function Jobs() {
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </InputGroup>
-                        
+                        <Row md={3} className="g-4">
                             {filteredAvailableCompanies.length > 0 ? (
                                 filteredAvailableCompanies.map(company => (
-                                    <Row md={3} className="g-4">
-                                    <Col key={company.companyName}>
+                                    <Col>
                                         <Card className="mb-4">
                                             <Card.Header style={{backgroundColor: '#D7DAF2', color: 'black'}}>{company.companyName}</Card.Header>
                                             <Card.Body className="scrollable-card">
-                                                <Card.Text>
+                                                <Card.Text style={{textAlign: "left"}}>
                                                     <strong>Role:</strong> {company.jobTitle}<br/>
                                                     <strong>Required Skills:</strong> {company.reqSkills}<br/>
                                                     <strong>Job Criteria:</strong> {company.jobCriteria}<br/>
@@ -112,13 +118,12 @@ function Jobs() {
                                             </Card.Footer>
                                         </Card>
                                     </Col>
-                                    </Row>
                                 ))
                             ) : (
                                 <div><br/>
                                 <p style={{ color: 'red', marginTop: "150px", fontSize: "30px" }}>No Jobs To Show</p></div>
                             )}
-
+                        </Row>
                     </Tab>
                     <Tab eventKey="applied" title="Applied Jobs">
                         <br/>
@@ -133,11 +138,11 @@ function Jobs() {
                         <Row md={3} className="g-4">
                             {filteredAppliedCompanies.length > 0 ? (
                                 filteredAppliedCompanies.map(company => (
-                                    <Col key={company.companyName}>
+                                    <Col>
                                         <Card className="mb-4">
                                             <Card.Header style={{backgroundColor: '#D7DAF2', color: 'black'}}>{company.companyName}</Card.Header>
                                             <Card.Body className="scrollable-card">
-                                                <Card.Text>
+                                                <Card.Text style={{textAlign: "left"}}>
                                                     <strong>Role:</strong> {company.jobTitle}<br/>
                                                     <strong>Required Skills:</strong> {company.reqSkills}<br/>
                                                     <strong>Job Criteria:</strong> {company.jobCriteria}<br/>
@@ -156,6 +161,19 @@ function Jobs() {
                                                         }}>
                                                         Download JD
                                                     </Button>
+                                                    {company.status === 'rejected' ? (
+                                                        <p style={{ color: 'red' }}>
+                                                            <FontAwesomeIcon icon={['fas', 'times-circle']} /> Rejected
+                                                        </p>
+                                                        ) : company.status === 'approved' ? (
+                                                        <p style={{ color: 'green' }}>
+                                                            <FontAwesomeIcon icon={['fas', 'check-circle']} /> Approved
+                                                        </p>
+                                                        ) : (
+                                                        <p style={{ color: 'orange' }}>
+                                                            <FontAwesomeIcon icon={['far', 'clock']} /> Pending
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </Card.Footer>
                                         </Card>

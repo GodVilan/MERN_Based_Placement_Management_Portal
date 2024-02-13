@@ -191,24 +191,6 @@ app.get('/ViewCompanies/get-companies', async (req, res) => {
 
   res.json(companies);
 });
-app.get('/StdInterests/get-stdinterest/:uid', async (req, res) => {
-  try {
-      const uid = req.params.uid;
-      const studentInterests = await stdinterestModel.find({ students: uid });
-      if (!studentInterests.length) {
-          return res.json([]);
-      }
-      const companyDetails = await Promise.all(studentInterests.map(async (interest) => {
-          const company = await companyModel.findOne({ companyName: interest.companyName });
-          return company;
-      }));
-      res.json(companyDetails);
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error' });
-  }
-});
-
 
 app.post('/AddCompanies/add-company', upload.any(), async (req, res) => {
   const { companyName, jobTitle, reqSkills, jobCriteria, cmpPackage } = req.body;
@@ -247,18 +229,38 @@ app.delete('/ViewCompanies/delete-company/:companyToDelete', async (req, res) =>
   }
 });
 
+app.get('/StdInterests/get-stdinterest/:uid', async (req, res) => {
+  try {
+    const uid = req.params.uid;
+    const studentInterests = await stdinterestModel.find({ "students.studentId": uid });
+    if (!studentInterests.length) {
+        return res.json([]);
+    }
+    const companyDetails = await Promise.all(studentInterests.map(async (interest) => {
+        const company = await companyModel.findOne({ companyName: interest.companyName });
+        const student = interest.students.find(student => student.studentId === uid);
+        return { ...company._doc, status: student.status };
+    }));
+    res.json(companyDetails);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 app.post('/Apply/std', async (req, res) => {
-  const { companyName, uid} = req.body;
+  const { companyName, uid } = req.body;
   try {
     let stdInterest = await stdinterestModel.findOne({ companyName });
-    if(!stdInterest) {
+    if (!stdInterest) {
       stdInterest = new stdinterestModel({ companyName, students: [] });
       await stdInterest.save();
     }
-    if (stdInterest.students.includes(uid)) {
+    if (stdInterest.students.find(student => student.studentId === uid)) {
       res.json('You have already Applied!');
     } else {
-      stdInterest.students.push(uid);
+      stdInterest.students.push({ studentId: uid, status: 'pending' });
       await stdInterest.save();
       res.json('Applied Successfully');
     }
@@ -266,6 +268,53 @@ app.post('/Apply/std', async (req, res) => {
     res.json('Error in Applying');
   }
 });
+
+app.get('/StudentInterests/:companyName', async (req, res) => {
+  try {
+    const companyName = req.params.companyName;
+    const studentInterests = await stdinterestModel.findOne({ companyName: companyName });
+    if (studentInterests) {
+      const pendingStudents = studentInterests.students.filter(student => student.status === 'pending');
+      res.json(pendingStudents);
+    } else {
+      res.json([]);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/CompanyDetails/:company', async (req, res) => {
+  try {
+    const companyName = req.params.company;
+    const companyData = await companyModel.findOne({ companyName: companyName});
+    res.json(companyData);
+  } catch(err) {
+    res.json({message: "Server Error"})
+  }
+});
+
+app.post('/api/updateStatus/:company', async (req, res) => {
+  const companyName = req.params.company;
+  const { studentId, status } = req.body;
+  try {
+    // Find the student interest document containing the studentId
+    let stdInterest = await stdinterestModel.findOne({ companyName: companyName });
+    if (!stdInterest) {
+      return res.json({ message: companyName });
+    }
+    // Find the student in the students array and update their status
+    let student = stdInterest.students.find(student => student.studentId === studentId);
+    student.status = status;
+    await stdInterest.save();
+    res.json({ message: 'Status updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 app.get('/AddCertifications/get-certifications/:uid', async (req, res) => {
   try {

@@ -21,9 +21,10 @@ import StudentBranch from './Components/StudentBranch';
 import StudentDetails from './Components/StudentDetails';
 import AdminLeaderboard from './Components/AdminLeaderboard';
 import StudentInterests from './Components/StudentInterests';
+import AppliedStudents from './Components/AppliedStudents';
+import StudentCompare from './Components/StudentCompare';
 
 function App() {
-  // const [uid, setUid] = useState(null);
   return (
     <div className='App'>
       <Routes>
@@ -46,6 +47,8 @@ function App() {
         <Route path = '/students/:stream/:uid' element = {<StudentDetails/>}></Route>
         <Route path = '/StudentLeaderboard' element = {<AdminLeaderboard/>}></Route>
         <Route path = '/StudentInterests' element = {<StudentInterests/>}></Route>
+        <Route path = '/studentInterests/:company' element = {<AppliedStudents/>}></Route>
+        <Route path = '/studentInterests/:company/:uid' element = {<StudentCompare/>}></Route>
       </Routes>
     </div>
   )
