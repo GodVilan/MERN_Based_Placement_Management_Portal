@@ -3,7 +3,7 @@ import Header from './Header';
 import { useParams } from 'react-router-dom';
 import problems from './ProblemSet.json';
 import Editor from '@monaco-editor/react';
-import { Container, Row, Col, ButtonToolbar, ButtonGroup, Button, Form, Card } from 'react-bootstrap';
+import { Spinner, Container, Row, Col, ButtonToolbar, ButtonGroup, Button, Form, Card } from 'react-bootstrap';
 import '../CSS/Problem.css'
 
 function Problem() {
@@ -13,36 +13,39 @@ function Problem() {
   const [output, setOutput] = useState('');
   const [language, setLanguage] = useState('python'); // Set the default language to JavaScript
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [theme, setTheme] = useState('light');
 
 const defaultCode = {
       python: `# type your code here`,
       java: `import java.util.*;
-  import java.lang.*;
-  import java.io.*;
+import java.lang.*;
+import java.io.*;
 
-  public class Main {
-    //Don't Change the Class Name Main
-    public static void main(String[] args) {
-      System.out.println("Hello, World!");
-    }
-  }`,
+public class Main {
+  //Don't Change the Class Name Main
+  public static void main(String[] args) {
+    System.out.println("Hello, World!");
+  }
+}`,
       cpp: `#include <bits/stdc++.h>
-  using namespace std;
+using namespace std;
 
-  int main() {
-    std::cout << "Hello World!";
-    return 0;
-  }`,
+int main() {
+  std::cout << "Hello World!";
+  return 0;
+}`,
 };
 
   useEffect(() => {
     const problem = problems[problemSetId].find(p => p.id.toString() === problemId);
     setProblem(problem);
-    const storedCode = localStorage.getItem(`code-${problemId}-${language}`);
-    setCode(storedCode || defaultCode[language]);
+    // const storedCode = localStorage.getItem(`code-${problemId}-${language}`);
+    setCode(defaultCode[language]);
   }, [problemSetId, problemId, language]);
 
   const compileAndRun = () => {
+    setIsLoading(true);
     fetch('/api/compileAndRun', {
       method: 'POST',
       headers: {
@@ -53,10 +56,12 @@ const defaultCode = {
       .then((response) => response.json())
       .then((data) => {
         setOutput(data.output);
+        setIsLoading(false);
       });
   };
   
   const submit = () => {
+    setIsLoading(true);
     fetch('/api/submit', {
       method: 'POST',
       headers: {
@@ -67,16 +72,20 @@ const defaultCode = {
       .then((response) => response.json())
       .then((data) => {
         setOutput(data.message);
+        setIsLoading(false);
       });
   };
   
 
   const handleLanguageChange = (event) => {
     const newLanguage = event.target.value;
-    localStorage.setItem(`code-${problemId}-${language}`, code);
+    // localStorage.setItem(`code-${problemId}-${language}`, code);
     setLanguage(newLanguage);
-    const storedCode = localStorage.getItem(`code-${problemId}-${newLanguage}`);
-    setCode(storedCode || defaultCode[newLanguage]);
+    // const storedCode = localStorage.getItem(`code-${problemId}-${newLanguage}`);
+    setCode(defaultCode[newLanguage]);
+  };
+  const switchTheme = () => {
+    setTheme(theme === 'light' ? 'vs-dark' : 'light');
   };
 
   if (!problem) {
@@ -89,52 +98,53 @@ const defaultCode = {
       <Container fluid style={{marginTop: "10px", marginLeft: "10px", marginRight: "10px", marginBottom: "10px", overflowY: "scroll" }}>
         <Row>
         <Col md={6} style={{ border: '2px solid black', borderRadius: "10px", padding: '10px' }}>
-  <div style={{textAlign: "left"}}>
-    <strong style={{fontSize: "30px", fontWeight: "lighter", color: "#1F0954"}}>{problem.problemName}</strong>
-    <p><strong>Problem Statement:</strong><br/> 
-      {problem.problemStatement.split('\n').map((line, i) => (
-        <React.Fragment key={i}>
-          {line}
-          <br />
-        </React.Fragment>
-      ))}
-    </p>
-    <p><strong>Constraints:</strong><br/> 
-      {problem.constraints.split('\n').map((line, i) => (
-        <React.Fragment key={i}>
-          {line}
-          <br />
-        </React.Fragment>
-      ))}
-    </p>
-    <p><strong>Sample Input:</strong><br/> 
-      {problem.sampleInput.split('\n').map((line, i) => (
-        <React.Fragment key={i}>
-          {line}
-          <br />
-        </React.Fragment>
-      ))}
-    </p>
-    <p><strong>Sample Output:</strong><br/> 
-      {problem.sampleOutput.split('\n').map((line, i) => (
-        <React.Fragment key={i}>
-          {line}
-          <br />
-        </React.Fragment>
-      ))}
-    </p>
-  </div>
-</Col>
+          <div style={{textAlign: "left"}}>
+            <strong style={{fontSize: "30px", fontWeight: "lighter", color: "#1F0954"}}>{problem.problemName}</strong>
+            <p><strong>Problem Statement:</strong><br/> 
+              {problem.problemStatement.split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
+            </p>
+            <p><strong>Constraints:</strong><br/> 
+              {problem.constraints.split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
+            </p>
+            <p><strong>Sample Input:</strong><br/> 
+              {problem.sampleInput.split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
+            </p>
+            <p><strong>Sample Output:</strong><br/> 
+                <React.Fragment>
+                  <pre style={{fontFamily: 'inherit', fontSize: "16px"}}>{problem.sampleOutput}</pre>
+                  <br />
+                </React.Fragment>
+            </p>
+          </div>
+        </Col>
 
           <Col md={6} style={{ border: '2px solid black', borderRadius: "10px", padding: '10px' }}>
-            <Form.Select aria-label="Language Select" onChange={handleLanguageChange}>
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+            <Form.Select style={{width: "120px"}} aria-label="Language Select" onChange={handleLanguageChange}>
               <option value="python">Python</option>
               <option value="java">Java</option>
               <option value="cpp">C++</option>
             </Form.Select>
+            <Button onClick={switchTheme}>Switch Theme</Button>
+            </div>
             <div style={{ border: '2px solid black', borderRadius: "10px", height: "400px", marginTop: '10px', marginBottom: '10px', backgroundColor: "#332D2D" }}>
               <Editor
-                style = {{Body: "#332D2D"}}
+                theme={theme}
                 height="50vh"
                 defaultLanguage={language}
                 value={code}
@@ -165,12 +175,16 @@ const defaultCode = {
                 </Card>
               </Col>
               <Col>
-                <Card style={{width: "300px", height: "200px"}}>
-                  <Card.Header>Output</Card.Header>
-                  <Card.Body style={{textAlign: "left"}}>
-                    <p>{output}</p>
-                  </Card.Body>
-                </Card>
+              <Card style={{width: "300px", height: "200px"}}>
+  <Card.Header>Output</Card.Header>
+  <Card.Body style={{textAlign: "left"}}>
+    {isLoading ? <Spinner animation="border" /> : 
+      <p style={output !== 'Accepted' ? { color: 'red' } : { color: 'green' }}>
+        {output}
+      </p>
+    }
+  </Card.Body>
+</Card>
               </Col>
             </Row>
           </Col>
@@ -181,5 +195,3 @@ const defaultCode = {
 }
 
 export default Problem;
-
-

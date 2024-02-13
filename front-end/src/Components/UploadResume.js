@@ -41,14 +41,14 @@ function UploadResume() {
     return (
         <div>
             <Header uid={uid} />
-            <h1 style={{marginTop : "20px"}}>Upload Your Resume</h1>
+            <h1 style={{marginTop : "10px"}}>Upload Your Resume</h1>
             <Container className='resume-container' style={{marginTop: "-100px"}}>
                 <Row className="justify-content-md-center" md={2}>
                     <Col className='auto'>
-                        <Card className="card">
+                        <Card className="card" style={{marginTop: "100px"}}>
                             <Card.Header className='card-header'>{student.name}'s Resume</Card.Header>
                             <Card.Body>
-                                <div style={{ overflowY: 'scroll', maxHeight: '300px' }}>
+                                <div style={{ overflowY: 'scroll', maxHeight: '400px' }}>
                                     {resume ? (
                                         <div>
                                             <Button className="btn btn-primary" onClick={() => setShowResume(!showResume)}>

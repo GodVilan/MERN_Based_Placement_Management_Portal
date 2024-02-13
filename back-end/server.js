@@ -12,9 +12,13 @@ import { config } from "dotenv";
 import stdinterestModel from "./models/stdinterestModel.js";
 import certificationModel from "./models/certificationModel.js";
 import resumeModel from "./models/resumeModel.js";
+import codeSubmissionModel from "./models/codeSubmission.js";
+import solCountModel from "./models/solCountModel.js";
+import os from "os";
 import { spawn } from 'child_process';
 import fs from 'fs';
 import validator from 'validator';
+import stdProjectModel from "./models/stdProjectModel.js";
 
 config();
 
@@ -30,21 +34,21 @@ app.use(bodyParser.json());
 //   }
 // ));
 app.use(express.json());
-const submissionSchema = new mongoose.Schema({
-  uid: String,
-  problemId: Number,
-  problemName: String,
-  code: [String],
-  status: [String],
-});
+// const submissionSchema = new mongoose.Schema({
+//   uid: String,
+//   problemId: Number,
+//   problemName: String,
+//   code: [String],
+//   status: [String],
+// });
 
-const studentSchema = new mongoose.Schema({
-  uid: String,
-  solved: Number,
-});
+// const studentSchema = new mongoose.Schema({
+//   uid: String,
+//   solved: Number,
+// });
 
-const Submission = mongoose.model('Submission', submissionSchema);
-const Student = mongoose.model('Student', studentSchema);
+// const Submission = mongoose.model('Submission', submissionSchema);
+// const Student = mongoose.model('Student', studentSchema);
 
 const port = process.env.PORT || 5010;
 
@@ -382,12 +386,12 @@ app.post('/api/submit', async (req, res) => {
     const { input, output: expectedOutput } = testCases[i];
     try {
       const output = await compileAndRun(code, language, input);
-      if (output === 'Compilation error' || output === 'Runtime error' || output === 'Unsupported language') {
-        status = output;
+      if (output.includes('Error')) {
+        status = "Compile/Runtime Error";
         break;
       }
-      if (!checkOutput(output, expectedOutput)) {
-        status = 'Wrong Answer';
+      if(!checkOutput(output, expectedOutput)) {
+        status = "Wrong Answer";
         break;
       }
     } catch (error) {
@@ -395,71 +399,230 @@ app.post('/api/submit', async (req, res) => {
       break;
     }
   }
-  const submission = new Submission({ uid, problemId, problemName, code, status });
-  await submission.save();
-  if (status === 'Accepted') {
-    await Student.updateOne({ uid }, { $inc: { solved: 1 } });
+  const submission = await codeSubmissionModel.findOne({ uid, problemId });
+  if (submission) {
+    submission.code.push(code);
+    submission.status.push(status);
+    await submission.save();
+  } else {
+    const newSubmission = new codeSubmissionModel({ uid, problemId, problemName, code: [code], status: [status] });
+    await newSubmission.save();
   }
-  res.json({ message: `Submission ${status}` });
+  if (status === 'Accepted') {
+    let student = await solCountModel.findOne({ uid });
+    if (student) {
+      if (!student.solvedProblems.includes(problemId)) {
+        student.solvedProblems.push(problemId);
+        student.solvedCount += 1;
+        await student.save();
+      }
+    } else {
+      const newStudent = new solCountModel({ uid, solvedCount: status === 'Accepted' ? 1 : 0, solvedProblems: [problemId] });
+      await newStudent.save();
+    }  
+  }
+  res.json({ message: `${status}` });
 });
 
-function compileAndRun(code, language, input) {
+const javaKeywords = ['abstract', 'assert', 'boolean', 'break', 'byte', 'case', 'catch', 'char', 'class', 'const', 'continue', 'default', 'do', 'double', 'else', 'enum', 'extends', 'final', 'finally', 'float', 'for', 'goto', 'if', 'implements', 'import', 'instanceof', 'int', 'interface', 'long', 'native', 'new', 'package', 'private', 'protected', 'public', 'return', 'short', 'static', 'strictfp', 'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient', 'try', 'void', 'volatile', 'while'];
+// const pythonKeywords = ['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield'];
+const cppKeywords = ['alignas', 'alignof', 'and', 'and_eq', 'asm', 'auto', 'bitand', 'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char8_t', 'char16_t', 'char32_t', 'class', 'compl', 'concept', 'const', 'consteval', 'constexpr', 'constinit', 'const_cast', 'continue', 'co_await', 'co_return', 'co_yield', 'decltype', 'default', 'delete', 'do', 'double', 'dynamic_cast', 'else', 'enum', 'explicit', 'export', 'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline', 'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not', 'not_eq', 'nullptr', 'operator', 'or', 'or_eq', 'private', 'protected', 'public', 'register', 'reinterpret_cast', 'requires', 'return', 'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast', 'struct', 'switch', 'synchronized', 'template', 'this', 'thread_local', 'throw', 'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq'];
+
+function compileAndRun(code, language, input) { 
+  let codeKeywords;
+  if (language === 'java') {
+    codeKeywords = javaKeywords;
+    if (!codeKeywords.some(keyword => code.includes(keyword))) {
+      return Promise.resolve('Invalid Code');
+    }
+  } else if (language === 'python') {
+    codeKeywords = [];
+  } else if (language === 'cpp') {
+    codeKeywords = cppKeywords;
+    if (!codeKeywords.some(keyword => code.includes(keyword))) {
+      return Promise.resolve('Invalid Code');
+    }
+  }
+
+
   return new Promise((resolve, reject) => {
+    const timeLimit = 5000;
     let process;
+    let timer;
+    let errorOutput = '';
+
+    const cleanup = () => {
+      clearTimeout(timer);
+      if (process) process.kill();
+    };
+
+    const handleTimeout = () => {
+      cleanup();
+      resolve('TLE: Time Limit Exceeded');
+    };
+
     if (language === 'python') {
       process = spawn('python', ['-c', code]);
+      timer = setTimeout(handleTimeout, timeLimit);
+      runProcess(process, input, resolve, reject);
     } else if (language === 'java') {
       fs.writeFileSync('Main.java', code);
       const compile = spawn('javac', ['Main.java']);
+      compile.stderr.on('data', (data) => {
+        errorOutput += data;
+      });
       compile.on('close', (code) => {
         if (code !== 0) {
-          resolve('Compilation error');
+          cleanup();
+          resolve(errorOutput);
           return;
         }
         process = spawn('java', ['Main']);
+        timer = setTimeout(handleTimeout, timeLimit);
         runProcess(process, input, resolve, reject);
       });
       return;
     } else if (language === 'cpp') {
       fs.writeFileSync('main.cpp', code);
       const compile = spawn('g++', ['main.cpp', '-o', 'main']);
+      compile.stderr.on('data', (data) => {
+        errorOutput += data;
+      });
       compile.on('close', (code) => {
         if (code !== 0) {
-          resolve('Compilation error');
+          cleanup();
+          resolve(errorOutput);
           return;
         }
         process = spawn('./main');
+        timer = setTimeout(handleTimeout, timeLimit);
         runProcess(process, input, resolve, reject);
       });
       return;
     } else {
+      cleanup();
       resolve('Unsupported language');
       return;
     }
+    timer = setTimeout(handleTimeout, timeLimit);
     runProcess(process, input, resolve, reject);
   });
 }
 
+
+
+// function compileAndRun(code, language, input) {
+//   return new Promise((resolve, reject) => {
+//     let process;
+//     if (language === 'python') {
+//       process = spawn('python', ['-c', code]);
+//     } else if (language === 'java') {
+//       fs.writeFileSync('Main.java', code);
+//       const compile = spawn('javac', ['Main.java']);
+//       compile.on('close', (code) => {
+//         if (code !== 0) {
+//           resolve('Compilation error');
+//           return;
+//         }
+//         process = spawn('java', ['Main']);
+//         runProcess(process, input, resolve, reject);
+//       });
+//       return;
+//     } else if (language === 'cpp') {
+//       fs.writeFileSync('main.cpp', code);
+//       const compile = spawn('g++', ['main.cpp', '-o', 'main']);
+//       compile.on('close', (code) => {
+//         if (code !== 0) {
+//           console.log(code);
+//           resolve('Compilation error');
+//           return;
+//         }
+//         process = spawn('./main');
+//         runProcess(process, input, resolve, reject);
+//       });
+//       return;
+//     } else {
+//       resolve('Unsupported language');
+//       return;
+//     }
+//     runProcess(process, input, resolve, reject);
+//   });
+// }
+
+// function compileAndRun(code, language, input) {
+//   return new Promise((resolve, reject) => {
+//     let process;
+//     const tempDir = os.tmpdir();
+//     const tempFile = path.join(tempDir, `temp${Date.now()}`);
+
+//     if (language === 'python') {
+//       fs.writeFileSync(`${tempFile}.py`, code);
+//       process = spawn('python', [`${tempFile}.py`]);
+//     } else if (language === 'java') {
+//       fs.writeFileSync(`${tempFile}.java`, code);
+//       const compile = spawn('javac', [`${tempFile}.java`]);
+//       compile.on('close', (code) => {
+//         if (code !== 0) {
+//           resolve('Compilation error');
+//           return;
+//         }
+//         process = spawn('java', ['-cp', tempDir, path.basename(tempFile)]);
+//         runProcess(process, input, resolve, reject);
+//       });
+//       return;
+//     } else if (language === 'cpp') {
+//       fs.writeFileSync(`${tempFile}.cpp`, code);
+//       const compile = spawn('g++', [`${tempFile}.cpp`, '-o', `${tempFile}.out`]);
+//       compile.on('close', (code) => {
+//         if (code !== 0) {
+//           resolve('Compilation error');
+//           return;
+//         }
+//         process = spawn(`${tempFile}.out`);
+//         runProcess(process, input, resolve, reject);
+//       });
+//       return;
+//     } else if (language === 'javascript') {
+//       fs.writeFileSync(`${tempFile}.js`, code);
+//       process = spawn('node', [`${tempFile}.js`]);
+//     } else {
+//       resolve('Unsupported language');
+//       return;
+//     }
+//     runProcess(process, input, resolve, reject);
+//   });
+// }
+
 function runProcess(process, input, resolve, reject) {
   let output = '';
+  let errorOutput = '';
+
   process.stdout.on('data', (data) => {
     output += data;
   });
+
   process.stderr.on('data', (data) => {
-    resolve(data);
+    errorOutput += data;
   });
+
   process.on('close', (code) => {
     if (code !== 0) {
-      resolve('Runtime error');
+      resolve(errorOutput ? errorOutput : 'Runtime error');
       return;
     }
     resolve(output);
   });
+
   if (input) {
-    process.stdin.write(input);
+    process.stdin.write(input, () => {
+      process.stdin.end();
+    });
+  } else {
     process.stdin.end();
   }
 }
+
+
 
 function checkOutput(output, expectedOutput) {
   output = output.trim();
@@ -467,9 +630,99 @@ function checkOutput(output, expectedOutput) {
   return output === expectedOutput;
 }
 
+app.get('/solvedCount/:uid', async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const student = await solCountModel.findOne({ uid });
+    if (student) {
+      res.json({ uid: student.uid, solvedCount: student.solvedCount });
+    } else {
+      res.json({ uid: uid, solvedCount: 0 });
+    }
+  } catch (error) {
+    res.json({ message: 'Server error' });
+  }
+});
+app.get('/api/submissions', async (req, res) => {
+  const { uid } = req.query;
+  
+  try {
+    const submissions = await codeSubmissionModel.find({ uid: uid });
+    res.json(submissions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/get-projects/:uid', async (req, res) => {
+  try {
+      const projects = await stdProjectModel.findOne({ uid: req.params.uid });
+      if (!projects) {
+          return res.send({ message: 'No Projects' });
+      }
+      res.send(projects);
+  } catch (err) {
+      res.status(500).send({ error: 'Something went wrong' });
+  }
+});
+
+app.post('/add-project/:uid', async (req, res) => {
+  try {
+      let project = await stdProjectModel.findOne({ uid: req.params.uid });
+      if (!project) {
+          project = new stdProjectModel({
+              uid: req.params.uid,
+              projectTitle: [req.body.projectTitle],
+              projectObj: [req.body.projectObj],
+              projectURL: [req.body.projectURL]
+          });
+      } else {
+          project.projectTitle.push(req.body.projectTitle);
+          project.projectObj.push(req.body.projectObj);
+          project.projectURL.push(req.body.projectURL);
+      }
+      await project.save();
+      res.send(project);
+  } catch (err) {
+      res.status(500).send({ error: 'Something went wrong' });
+  }
+});
+
+app.delete('/delete-project/:uid', async (req, res) => {
+  try {
+      const { uid } = req.params;
+      const { projectTitle, projectObj, projectURL } = req.body; // assuming you're sending these in the request body
+
+      const project = await stdProjectModel.findOne({ uid: uid });
+      if (!project) {
+          return res.status(404).send({ message: 'No Project Found' });
+      }
+
+      const indexTitle = project.projectTitle.indexOf(projectTitle);
+      const indexObj = project.projectObj.indexOf(projectObj);
+      const indexURL = project.projectURL.indexOf(projectURL);
+
+      // Ensure the project exists in all arrays before deleting
+      if (indexTitle !== -1 && indexObj !== -1 && indexURL !== -1) {
+          project.projectTitle.splice(indexTitle, 1);
+          project.projectObj.splice(indexObj, 1);
+          project.projectURL.splice(indexURL, 1);
+          await project.save();
+          res.send({ message: 'Project deleted' });
+      } else {
+          res.status(404).send({ message: 'Project not found' });
+      }
+  } catch (err) {
+      res.status(500).send({ error: 'Something went wrong' });
+  }
+});
 
 
+// app.use(express.static(path.join(__dirname, "./front-end/build")));
 
+// app.get("*", function (req, res) {
+//   res.sendFile(path.join(__dirname, "./front-end/build/index.html"));
+// });
 
 const uri = process.env.MONGO_DB;
 

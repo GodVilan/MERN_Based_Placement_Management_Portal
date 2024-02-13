@@ -1,16 +1,13 @@
 import mongoose from "mongoose";
+
 const submissionSchema = new mongoose.Schema({
-  problemName: String,
-  code: String,
-  status: String,
-});
-
-const userSchema = new mongoose.Schema({
   uid: String,
-  submissions: [submissionSchema],
+  problemId: Number,
+  problemName: String,
+  code: [{ type: String }],
+  status: [{ type: String }],
 });
 
-const User = mongoose.model('User', userSchema);
-const Submission = mongoose.model('Submission', submissionSchema);
+const codeSubmissionModel = new mongoose.model("submissions", submissionSchema);
 
-export default { User, Submission };
+export default codeSubmissionModel;

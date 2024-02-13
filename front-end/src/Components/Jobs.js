@@ -70,7 +70,7 @@ function Jobs() {
                     id="justify-tab-example"
                     justify
                 >
-                    <Tab className='tab-tile' eventKey="explore" title="Explore Companies">
+                    <Tab className='tab-tile' eventKey="explore" title="Explore Jobs">
                     <br/>
                         <InputGroup className="search-bar">
                             <FormControl
@@ -80,9 +80,10 @@ function Jobs() {
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </InputGroup>
-                        <Row md={3} className="g-4">
+                        
                             {filteredAvailableCompanies.length > 0 ? (
                                 filteredAvailableCompanies.map(company => (
+                                    <Row md={3} className="g-4">
                                     <Col key={company.companyName}>
                                         <Card className="mb-4">
                                             <Card.Header style={{backgroundColor: '#D7DAF2', color: 'black'}}>{company.companyName}</Card.Header>
@@ -111,14 +112,15 @@ function Jobs() {
                                             </Card.Footer>
                                         </Card>
                                     </Col>
+                                    </Row>
                                 ))
                             ) : (
                                 <div><br/>
-                                <p>No Companies To Apply</p></div>
+                                <p style={{ color: 'red', marginTop: "150px", fontSize: "30px" }}>No Jobs To Show</p></div>
                             )}
-                        </Row>
+
                     </Tab>
-                    <Tab eventKey="applied" title="Applied Companies">
+                    <Tab eventKey="applied" title="Applied Jobs">
                         <br/>
                         <InputGroup className="search-bar">
                             <FormControl
@@ -161,7 +163,7 @@ function Jobs() {
                                  <Modal.Header closeButton>
                                      <Modal.Title>Success</Modal.Title>
                                  </Modal.Header>
-                                 <Modal.Body>Applied Successfully</Modal.Body>
+                                 <Modal.Body style={{color: "green"}}>Applied Successfully</Modal.Body>
                                  <Modal.Footer>
                                      <Button variant="secondary" onClick={() => setShowSuccessModal(false)}>
                                      Close
@@ -172,7 +174,7 @@ function Jobs() {
                                  <Modal.Header closeButton>
                                      <Modal.Title>Error</Modal.Title>
                                  </Modal.Header>
-                                 <Modal.Body>Error Occured While Applying!</Modal.Body>
+                                 <Modal.Body style={{color: "red"}}>Error Occured While Applying!</Modal.Body>
                                  <Modal.Footer>
                                      <Button variant="danger" onClick={() => setShowErrorModal(false)}>
                                      Close
@@ -184,7 +186,7 @@ function Jobs() {
                                 ))
                             ) : (
                                 <div><br/>
-                                <p>You Have Not Applied To Any Company</p></div>
+                                <p style={{color: "red"}}>You Have Not Applied To Any Company</p></div>
                             )}
                         </Row>
                     </Tab>

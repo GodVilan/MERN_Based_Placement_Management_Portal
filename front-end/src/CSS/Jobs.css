@@ -27,13 +27,13 @@
     color: white !important;
   }
   .nav-tabs .nav-item .nav-link {
-    color: white !important;
-    background-color: #FF2400;
+    color: black !important;
+    background-color: white;
 }
 
 .nav-tabs .nav-item .nav-link.active {
-    color: white !important;
-    background-color: #009E60;
+    color: black !important;
+    background-color: #D7DAF2;
 }
 /* .search-bar {
   border-width: 2px !important;

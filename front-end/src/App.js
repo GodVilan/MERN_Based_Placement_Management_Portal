@@ -16,6 +16,11 @@ import UploadResume from './Components/UploadResume';
 import ProblemSolving from './Components/ProblemSolving';
 import ProblemSet from './Components/ProblemSet';
 import Problem from './Components/Problem';
+import StudentProjects from './Components/StudentProjects';
+import StudentBranch from './Components/StudentBranch';
+import StudentDetails from './Components/StudentDetails';
+import AdminLeaderboard from './Components/AdminLeaderboard';
+import StudentInterests from './Components/StudentInterests';
 
 function App() {
   // const [uid, setUid] = useState(null);
@@ -28,6 +33,7 @@ function App() {
         <Route path = '/AddSkills/:uid' element={<AddSkills/>}></Route>
         <Route path = '/Achievements/:uid' element={<Achievements/>}></Route>
         <Route path = '/AddCertifications/:uid' element={<AddCertifications/>}></Route>
+        <Route path = '/MyProjects/:uid' element = {<StudentProjects/>}></Route>
         <Route path = '/Jobs/:uid' element={<Jobs/>}></Route>
         <Route path = '/ProblemSolving/:uid' element={<ProblemSolving/>}></Route>
         <Route path = '/:uid/problems/:problemSetId' element={<ProblemSet/>}></Route>
@@ -36,6 +42,10 @@ function App() {
         <Route path = '/AddCompanies' element = {<AddCompanies/>}></Route>
         <Route path = '/ViewCompanies' element = {<ViewCompanies/>}></Route>
         <Route path = '/UploadResume/:uid' element = {<UploadResume/>}></Route>
+        <Route path = '/students/:stream' element = {<StudentBranch/>}></Route>
+        <Route path = '/students/:stream/:uid' element = {<StudentDetails/>}></Route>
+        <Route path = '/StudentLeaderboard' element = {<AdminLeaderboard/>}></Route>
+        <Route path = '/StudentInterests' element = {<StudentInterests/>}></Route>
       </Routes>
     </div>
   )

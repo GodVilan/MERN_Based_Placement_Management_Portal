@@ -69,8 +69,8 @@ function Login() {
           <h3 className="logincard-title"><strong>Student Login</strong></h3>
           <form onSubmit={npage}>
             <div className="form-group">
-              <label htmlFor="uid">User ID</label>
-              <input type="text" className="form-control" id="uid" value={uid} onChange={(e) => setuid(e.target.value)} />
+              <label htmlFor="uid">Roll No</label>
+              <input style={{cursor: "text"}} type="text" className="form-control" id="uid" value={uid} onChange={(e) => setuid(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="pwd">Password</label>
@@ -85,7 +85,7 @@ function Login() {
           <form onSubmit={npage}>
             <div className="form-group">
               <label htmlFor="uid">User ID</label>
-              <input type="text" className="form-control" id="id" value={uid} onChange={(e) => setuid(e.target.value)} />
+              <input style={{cursor: "text"}} type="text" className="form-control" id="id" value={uid} onChange={(e) => setuid(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="pwd">Password</label>

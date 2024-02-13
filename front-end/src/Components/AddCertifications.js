@@ -12,8 +12,6 @@ const AddCertifications = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [certificationToView, setCertificationToView] = useState('');
   const [certificationToDelete, setCertificationToDelete] = useState('');
 
   useEffect(() => {
@@ -21,7 +19,6 @@ const AddCertifications = () => {
       const response = await fetch(`/AddCertifications/get-certifications/${uid}`);
       const data = await response.json();
       if (data) {
-        console.log(data);
         setCertifications(data);
       } else {
         setCertifications([]);
@@ -74,19 +71,12 @@ const AddCertifications = () => {
     setCertificationToDelete(certificationName);
     setShowDeleteModal(true);
   };
-  const handleViewClick = (certificationName) => {
-    setCertificationToView(certificationName);
-    setShowViewModal(true);
-  };
 
-  const downloadCertification = async (certificationName) => {
-    const response = await fetch(`/AddCertifications/download-certification/${uid}/${certificationName}`);
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${certificationName}.pdf` || 'download';
-    a.click();
+  const handleViewClick = (bufferData) => {
+    const arrayBuffer = new Uint8Array(bufferData);
+    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
   };
 
   return (
@@ -98,29 +88,32 @@ const AddCertifications = () => {
             <Card className="card" style={{marginTop : "50px"}}>
               <Card.Header className='card-header'>Add a Certification</Card.Header>
               <Card.Body>
+                <ol className="certificate-name">
                   {certifications.length > 0 ? (
-                    certifications.map((certification, index) => (
-                      <Dropdown key={index}>
-                        <Dropdown.Toggle as="div" id={`dropdown-${index}`}>
-                          <ol className="certificate-name" onClick={(e) => {
-                            e.preventDefault();
-                            document.getElementById(`dropdown-${index}`).click();
+                      certifications.map((certification, index) => (
+                          <li className='certificate' key={index} onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById(`dropdown-${index}`).click();
                           }}>
-                            <li className='certificate'>{certification.name}</li>
-                          </ol>
-                        </Dropdown.Toggle>
+                              <Dropdown>
+                                  <Dropdown.Toggle as="div" id={`dropdown-${index}`}>
+                                      {certification.name}
+                                  </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => handleViewClick(certification.name)} style={{color: "green"}}>View</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleCertificationClick(certification.name)} style={{color: "red"}}>Delete</Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    ))
+                                  <Dropdown.Menu>
+                                      <Dropdown.Item onClick={() => handleViewClick(certification.certificationFile.data)} style={{color: "green"}}>View</Dropdown.Item>
+                                      <Dropdown.Item onClick={() => handleCertificationClick(certification.name)} style={{color: "red"}}>Delete</Dropdown.Item>
+                                  </Dropdown.Menu>
+                              </Dropdown>
+                          </li>
+                      ))
                   ) : (
-                    <div>
-                    <p><strong style={{color:"red"}}>No Certifications To Show!!</strong></p>
-                    </div>
+                      <div>
+                          <p><strong style={{color:"red"}}>No Certifications To Show!!</strong></p>
+                      </div>
                   )}
+                </ol>
+
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Control 
@@ -178,20 +171,6 @@ const AddCertifications = () => {
                 </Button>
                 <Button variant="danger" onClick={() => { deleteCertification(certificationToDelete); setShowDeleteModal(false); }}>
                   Delete
-                </Button>
-              </Modal.Footer>
-            </Modal>
-            <Modal show={showViewModal} onHide={() => setShowViewModal(false)}>
-              <Modal.Header closeButton>
-                <Modal.Title>View Certification</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>{certificationToView}</Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShowViewModal(false)}>
-                  Close
-                </Button>
-                <Button variant="primary" onClick={() => downloadCertification(certificationToView)}>
-                  Download Certification
                 </Button>
               </Modal.Footer>
             </Modal>

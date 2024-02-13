@@ -6,10 +6,10 @@ const AdminHeader = () => {
 
   return (
     <Navbar className='custom-navbar'>
-      <Nav className="mr-auto">
+      <Nav style={{marginLeft: "40px"}} className="mr-auto">
       <Link to={`/AdminPage`} className="nav-link"><strong>Home</strong></Link>
-        <Link to={`/StudentDetails`} className="nav-link"><strong>View Student Details</strong></Link>
-        <Link to={`/Leaderboard`} className="nav-link"><strong>Leaderboard</strong></Link>
+        {/* <Link to={`/StudentDetails`} className="nav-link"><strong>View Student Details</strong></Link> */}
+        <Link to={`/StudentLeaderboard`} className="nav-link"><strong>Leaderboard</strong></Link>
         <Link to={`/StudentInterests`} className="nav-link"><strong>View Student Interests</strong></Link>
         <Link to={`/ViewCompanies`} className="nav-link"><strong>View Companies</strong></Link>
         <Link to={`/AddCompanies`} className="nav-link"><strong>Add Companies</strong></Link>
