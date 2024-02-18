@@ -95,8 +95,8 @@ function StudentProjects() {
                         <Row style={{marginLeft: "50px"}} xs = {1} md={3} className="g-4">
                             {projects.projectTitle.map((title, index) => (
                                 <Col key={index}>
-                                    <Card className='mb-4' style={{width: "400px", height: "250px"}}>
-                                    <Card.Header style={{backgroundColor: '#D7DAF2', color: 'red', fontSize: "18px", fontWeight: "bold"}}>{title}</Card.Header>
+                                    <Card className='mb-4' style={{width: "400px", height: "auto"}}>
+                                    <Card.Header style={{backgroundColor: '#D7DAF2', fontSize: "18px", fontWeight: "bold"}}>{title}</Card.Header>
                                         <Card.Body className="scrollable-card" style={{textAlign: "justify"}}>
                                             <Card.Text>
                                                 <strong>Project Description: </strong>{projects.projectObj[index]}<br/><br/>

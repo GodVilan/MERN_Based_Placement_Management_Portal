@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import problems from './ProblemSet.json';
 import Editor from '@monaco-editor/react';
 import { Spinner, Container, Row, Col, ButtonToolbar, ButtonGroup, Button, Form, Card } from 'react-bootstrap';
-import '../CSS/Problem.css'
+import '../CSS/Problem.css';
 
 function Problem() {
   const { uid, problemSetId, problemId } = useParams();
@@ -95,9 +95,9 @@ int main() {
   return (
     <div>
       <Header uid={uid} />
-      <Container fluid style={{marginTop: "10px", marginLeft: "10px", marginRight: "10px", marginBottom: "10px", overflowY: "scroll" }}>
-        <Row>
-        <Col md={6} style={{ border: '2px solid black', borderRadius: "10px", padding: '10px' }}>
+      <Container fluid style={{marginTop: "10px", marginLeft: "10px", marginRight: "10px", marginBottom: "10px", overflowY: "scroll", width: "100%" }}>
+        <Row style={{width: "auto", marginRight: "-50px"}}>
+        <Col md={6} style={{ border: '2px solid black', borderRadius: "10px", padding: '10px', width: "40%", marginRight: "20px" }}>
           <div style={{textAlign: "left"}}>
             <strong style={{fontSize: "30px", fontWeight: "lighter", color: "#1F0954"}}>{problem.problemName}</strong>
             <p><strong>Problem Statement:</strong><br/> 
@@ -133,7 +133,7 @@ int main() {
           </div>
         </Col>
 
-          <Col md={6} style={{ border: '2px solid black', borderRadius: "10px", padding: '10px' }}>
+          <Col md={6} style={{ border: '2px solid black', borderRadius: "10px", padding: '10px', width: "55%" }}>
             <div style={{display: "flex", justifyContent: "space-between"}}>
             <Form.Select style={{width: "120px"}} aria-label="Language Select" onChange={handleLanguageChange}>
               <option value="python">Python</option>
@@ -160,33 +160,25 @@ int main() {
                   <Button variant='success' onClick={submit}>Submit</Button>
                 </ButtonGroup>
               </ButtonToolbar>
-            {/* <div style={{display: "flex", justifyContent: "space-between"}}>
-                
-                <Button variant="primary" onClick={compileAndRun} id="custom-button">Compile & Run</Button>
-                <Button variant='success' onClick={submit} id="custom-button">Submit</Button>
-            </div> */}
-            <Row style={{ marginTop: "-110px", display: "flex", justifyContent: "space-between", marginLeft: "25px" }} xs={1} md={2}>
-              <Col>
-                <Card style={{width: "300px", height: "200px"}}>
+                <div style={{display: "flex", justifyContent: "space-between", marginTop: "-20px"}}>
+                <Card style={{width: "40%", height: "auto", marginTop: "50px", marginLeft: "20px", marginBottom: "10px"}}>
                   <Card.Header>Custom Input</Card.Header>
                   <Card.Body>
                     <Form.Control as="textarea" rows={3} onChange={(e) => setInput(e.target.value)} value={input} />
                   </Card.Body>
                 </Card>
-              </Col>
-              <Col>
-              <Card style={{width: "300px", height: "200px"}}>
-  <Card.Header>Output</Card.Header>
-  <Card.Body style={{textAlign: "left"}}>
-    {isLoading ? <Spinner animation="border" /> : 
-      <p style={output !== 'Accepted' ? { color: 'red' } : { color: 'green' }}>
-        {output}
-      </p>
-    }
-  </Card.Body>
-</Card>
-              </Col>
-            </Row>
+              
+                <Card style={{width: "40%", height: "auto", marginTop: "50px", marginRight: "20px", marginBottom: "10px"}}>
+                <Card.Header>Output</Card.Header>
+                <Card.Body style={{textAlign: "left"}}>
+                  {isLoading ? <Spinner animation="border" /> : 
+                    <p style={output !== 'Accepted' ? { color: 'red' } : { color: 'green' }}>
+                      {output}
+                    </p>
+                  }
+                </Card.Body>
+              </Card>
+              </div>
           </Col>
         </Row>
       </Container>

@@ -47,6 +47,7 @@ function Leaderboard() {
           aria-describedby="basic-addon1"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          style={{borderRadius: "50px"}}
         />
       </InputGroup>
       <Table responsive style={{marginTop: "20px"}}>

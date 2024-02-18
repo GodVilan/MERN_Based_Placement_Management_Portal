@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../CSS/Login.css';
+
 
 function Login() {
   const [uid, setuid] = useState('');
   const [password, setpassword] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [passwordShown, setPasswordShown] = useState(false);
   const navi = useNavigate();
+
 
   async function npage(e) {
     e.preventDefault();
@@ -55,8 +60,9 @@ function Login() {
     setIsAdmin(!isAdmin);
     setErrorMessage('');
   }
-
-  
+  const togglePasswordVisiblity = () => {
+    setPasswordShown(passwordShown ? false : true);
+  };
 
   return (
     <div className='login-container'>
@@ -64,7 +70,14 @@ function Login() {
         <h1><strong>Welcome To College Placement Management Portal</strong></h1>
       </div>
       <div className="login-card">
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+        {errorMessage && 
+          <div className="alert alert-danger">
+              {errorMessage}
+              <span style={{marginLeft: '50px', cursor: 'pointer'}} onClick={() => setErrorMessage('')}>
+                  X
+              </span>
+          </div>
+        }
         <div className={`logincard-body ${isAdmin ? 'd-none' : ''}`}>
           <h3 className="logincard-title"><strong>Student Login</strong></h3>
           <form onSubmit={npage}>
@@ -72,10 +85,15 @@ function Login() {
               <label htmlFor="uid">Roll No</label>
               <input style={{cursor: "text"}} type="text" className="form-control" id="uid" value={uid} onChange={(e) => setuid(e.target.value)} />
             </div>
-            <div className="form-group">
-              <label htmlFor="pwd">Password</label>
-              <input type="password" className="form-control" id="pwd" value={password} onChange={(e) => setpassword(e.target.value)} />
-            </div><br/>
+            <div className="form-group position-relative">
+        <label htmlFor="student-pwd">Password</label>
+        <input type={passwordShown ? "text" : "password"} className="form-control" id="student-pwd" value={password} onChange={(e) => setpassword(e.target.value)} />
+        <i onClick={togglePasswordVisiblity} style={{ position: 'absolute', top: '70%', right: '10px', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+          {passwordShown ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
+        </i>
+      </div>
+            <Link to={'/Forgot'} style = {{color: "blue !important"}}>Forgot Password</Link>
+            <br/><br/>
             <button type="submit" className="btn btn-primary">Login</button>
           </form>
           <button onClick={switchForm} className="btn btn-secondary">Switch to Admin Login</button>
@@ -87,9 +105,12 @@ function Login() {
               <label htmlFor="uid">User ID</label>
               <input style={{cursor: "text"}} type="text" className="form-control" id="id" value={uid} onChange={(e) => setuid(e.target.value)} />
             </div>
-            <div className="form-group">
-              <label htmlFor="pwd">Password</label>
-              <input type="password" className="form-control" id="pawd" value={password} onChange={(e) => setpassword(e.target.value)} />
+            <div className="form-group position-relative">
+              <label htmlFor="admin-pwd">Password</label>
+              <input type={passwordShown ? "text" : "password"} className="form-control" id="admin-pwd" value={password} onChange={(e) => setpassword(e.target.value)} />
+              <i onClick={togglePasswordVisiblity} style={{ position: 'absolute', top: '70%', right: '10px', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+                {passwordShown ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
+              </i>
             </div><br/>
             <button type="submit" className="btn btn-primary">Login</button>
           </form>

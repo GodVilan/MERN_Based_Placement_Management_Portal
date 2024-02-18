@@ -23,6 +23,7 @@ import AdminLeaderboard from './Components/AdminLeaderboard';
 import StudentInterests from './Components/StudentInterests';
 import AppliedStudents from './Components/AppliedStudents';
 import StudentCompare from './Components/StudentCompare';
+import ForgotPwd from './Components/ForgotPwd';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         <Route path = '/StudentInterests' element = {<StudentInterests/>}></Route>
         <Route path = '/studentInterests/:company' element = {<AppliedStudents/>}></Route>
         <Route path = '/studentInterests/:company/:uid' element = {<StudentCompare/>}></Route>
+        <Route path = '/forgot' element={<ForgotPwd/>}></Route>
       </Routes>
     </div>
   )

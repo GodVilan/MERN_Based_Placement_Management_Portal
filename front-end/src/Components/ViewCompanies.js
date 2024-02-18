@@ -66,6 +66,7 @@ const ViewCompanies = () => {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search for a company" 
+                  style={{ borderRadius: "50px" }}
                 />
                 {message && <Alert variant={message.variant}>{message.text}</Alert>}
                 <br/>

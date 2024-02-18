@@ -85,6 +85,7 @@ function Jobs() {
                                 aria-label="Search by Company Name"
                                 aria-describedby="basic-addon2"
                                 onChange={(e) => setSearch(e.target.value)}
+                                style={{borderRadius: "50px"}}
                             />
                         </InputGroup>
                         <Row md={3} className="g-4">
@@ -133,6 +134,7 @@ function Jobs() {
                                 aria-label="Search by Company Name"
                                 aria-describedby="basic-addon2"
                                 onChange={(e) => setSearch(e.target.value)}
+                                style={{borderRadius: "50px"}}
                             />
                         </InputGroup>
                         <Row md={3} className="g-4">

@@ -122,7 +122,8 @@ function StudentDetails() {
                 <div style={{display: "flex", marginLeft: "60%"}}>
                     <Link onClick={() =>{openResume(resume)}} style={{fontSize: "18px", fontWeight: "lighter", color: "green", textDecoration: "none"}}>View Resume</Link>
                 </div>
-                <div className='second-box' style={{float: "left", marginTop: "20px", marginLeft: "40px", width: "400px", height: "auto"}}>
+                <div style={{display: "flex", justifyContent:"space-between"}}>
+                <div className='second-box' style={{ marginTop: "20px", marginLeft: "40px", width: "400px", height: "auto"}}>
                     <div style={{ display: 'flex', alignItems: 'baseline', textAlign: "left", marginLeft: "10px" }}>
                         <h2 style={{ margin: 0 }}>S</h2>
                         <h4 style={{ margin: 0 }}>KILLS</h4>
@@ -138,7 +139,7 @@ function StudentDetails() {
                             )}
                     </ul>
                 </div>
-                <div className='third-box' style={{float: "right", marginTop: "20px", marginRight: "40px", width: "400px", height: "auto"}}>
+                <div className='third-box' style={{ marginTop: "20px", marginRight: "40px", width: "400px", height: "auto"}}>
                     <div style={{ display: 'flex', alignItems: 'baseline', textAlign: "left", marginLeft: "10px" }}>
                         <h2 style={{ margin: 0 }}>A</h2>
                         <h4 style={{ margin: 0 }}>CHIEVEMENTS</h4>
@@ -154,7 +155,9 @@ function StudentDetails() {
                             )}
                     </ul>
                 </div>
-                <div className='fourth-box' style={{float: "right", marginTop: "20px", marginRight: "40px", width: "400px", height: "auto"}}>
+                </div>
+                <div style={{display: "flex", justifyContent:"space-between"}}>
+                <div className='fourth-box' style={{ marginTop: "20px", marginLeft: "40px", width: "400px", height: "auto"}}>
                     <div style={{ display: 'flex', alignItems: 'baseline', textAlign: "left", marginLeft: "10px" }}>
                         <h2 style={{ margin: 0 }}>C</h2>
                         <h4 style={{ margin: 0 }}>ERTIFICATIONS</h4>
@@ -170,7 +173,7 @@ function StudentDetails() {
                             )}
                     </ul>
                 </div>
-                <div className='fifth-box' style={{float: "left", marginLeft: "40px", marginTop: "20px", width: "400px", height: "auto"}}>
+                <div className='fifth-box' style={{ marginRight: "40px", marginTop: "20px", width: "400px", height: "auto"}}>
                     <div style={{ display: 'flex', alignItems: 'baseline', textAlign: "left", marginLeft: "10px" }}>
                         <h2 style={{ margin: 0 }}>P</h2>
                         <h4 style={{ margin: 0 }}>ROJECTS</h4>
@@ -185,6 +188,7 @@ function StudentDetails() {
                         <li style={{color: "red"}}>No Projects</li>
                         )}
                     </ul>
+                </div>
                 </div>
             </div>
             <Modal className="custom-modal" show={showDetailsModal} onHide={() => setShowDetailsModal(false)}>

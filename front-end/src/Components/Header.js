@@ -30,7 +30,8 @@ const Header = ({ uid }) => {
             <Dropdown.Toggle className='profile-icon' as={Image} src={student.Image} roundedCircle width="30" height="30" />
 
             <Dropdown.Menu className='drop-menu'>
-              <Dropdown.Item  className="custom-item logout-button"  href="/">Logout</Dropdown.Item>
+            <Dropdown.Item  className="custom-item -button"  href="/forgot">Change Password</Dropdown.Item>
+              <Dropdown.Item  className="custom-item logout-button" href="/">Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Brand>

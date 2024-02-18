@@ -26,13 +26,13 @@ body {
 .nav-link:hover{
   color: orangered !important;
 }
-.drop-menu {
-  background-color: #ff0505 !important;
-}
-.logout-button {
-  background-color: #ff0505 !important;
-  color: white !important;
+
+.logout-button:hover {
+  color: red !important;
 }
 .profile-icon:hover {
   cursor: pointer !important;
+}
+.-button:hover {
+  color: blue !important;
 }

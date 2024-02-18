@@ -17,32 +17,32 @@ function StudentBranch() {
           setStudents(sortedStudents);
     }, [stream]);
 
-    const binarySearch = (students, uid) => {
-        let start = 0;
-        let end = students.length - 1;
+    // const binarySearch = (students, uid) => {
+    //     let start = 0;
+    //     let end = students.length - 1;
 
-        while (start <= end) {
-            let mid = Math.floor((start + end) / 2);
+    //     while (start <= end) {
+    //         let mid = Math.floor((start + end) / 2);
 
-            if (students[mid].uid === uid) {
-                return [students[mid]];
-            } else if (students[mid].uid < uid) {
-                start = mid + 1;
-            } else {
-                end = mid - 1;
-            }
-        }
-        return [];
-    }
-    // const filteredStudents = students.filter(student => student.uid.includes(search));
+    //         if (students[mid].uid === uid) {
+    //             return [students[mid]];
+    //         } else if (students[mid].uid < uid) {
+    //             start = mid + 1;
+    //         } else {
+    //             end = mid - 1;
+    //         }
+    //     }
+    //     return [];
+    // }
+    const filteredStudents = students.filter(student => student.uid.includes(search));
 
-    const filteredStudents = search ? binarySearch(students, search) : students;
+    // const filteredStudents = search ? binarySearch(students, search) : students;
 
     return (
         <div>
             <AdminHeader/>
             <h2 style={{marginTop: "20px", color: "#1F0954"}}>{stream}</h2>
-            <Container style={{marginTop: "20px", marginLeft: "50px", marginRight: "50px"}}>
+            <Container style={{marginTop: "20px", marginLeft: "50px", marginRight: "50px", borderRadius: "50px"}}>
                 <InputGroup className="search-bar">
                     <FormControl
                     placeholder="Search By Roll No"
@@ -50,6 +50,7 @@ function StudentBranch() {
                     aria-describedby="basic-addon1"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
+                    style={{borderRadius: "50px"}}
                     />
                 </InputGroup>
                 <Table style={{marginTop: "15px"}} responsive>

@@ -14,43 +14,32 @@ import certificationModel from "./models/certificationModel.js";
 import resumeModel from "./models/resumeModel.js";
 import codeSubmissionModel from "./models/codeSubmission.js";
 import solCountModel from "./models/solCountModel.js";
-import os from "os";
 import { spawn } from 'child_process';
 import fs from 'fs';
-import validator from 'validator';
 import stdProjectModel from "./models/stdProjectModel.js";
+// import { fileURLToPath } from 'url';
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 config();
 
 const app = express();
 app.use(cors());
-const upload = multer();
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+      fileSize: 5 * 1024 * 1024,
+  },
+});
 app.use(bodyParser.json());
-// app.use(cors(
-//   {
-//     origin : ["https://placement-management-portal.vercel.app/"],
-//     methods : ["POST", "GET"],
-//     credentials: true
-//   }
-// ));
 app.use(express.json());
-// const submissionSchema = new mongoose.Schema({
-//   uid: String,
-//   problemId: Number,
-//   problemName: String,
-//   code: [String],
-//   status: [String],
-// });
-
-// const studentSchema = new mongoose.Schema({
-//   uid: String,
-//   solved: Number,
-// });
-
-// const Submission = mongoose.model('Submission', submissionSchema);
-// const Student = mongoose.model('Student', studentSchema);
 
 const port = process.env.PORT || 5010;
+
+// app.get('/', async (req, res) => {
+//   res.json("Backend");
+// });
 
 app.post('/', async (req, res) => {
     const { uid, password } = req.body;
@@ -248,7 +237,6 @@ app.get('/StdInterests/get-stdinterest/:uid', async (req, res) => {
   }
 });
 
-
 app.post('/Apply/std', async (req, res) => {
   const { companyName, uid } = req.body;
   try {
@@ -269,21 +257,21 @@ app.post('/Apply/std', async (req, res) => {
   }
 });
 
-app.get('/StudentInterests/:companyName', async (req, res) => {
-  try {
+app.get('/AppliedStudents/:companyName', async(req,res)=>{
+  try{
     const companyName = req.params.companyName;
     const studentInterests = await stdinterestModel.findOne({ companyName: companyName });
     if (studentInterests) {
-      const pendingStudents = studentInterests.students.filter(student => student.status === 'pending');
-      res.json(pendingStudents);
+      res.json(studentInterests.students);
     } else {
       res.json([]);
     }
-  } catch (error) {
-    console.error(error);
+  }
+  catch(err){
+    console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
-});
+})
 
 app.get('/CompanyDetails/:company', async (req, res) => {
   try {
@@ -299,16 +287,23 @@ app.post('/api/updateStatus/:company', async (req, res) => {
   const companyName = req.params.company;
   const { studentId, status } = req.body;
   try {
-    // Find the student interest document containing the studentId
     let stdInterest = await stdinterestModel.findOne({ companyName: companyName });
     if (!stdInterest) {
       return res.json({ message: companyName });
     }
-    // Find the student in the students array and update their status
+
     let student = stdInterest.students.find(student => student.studentId === studentId);
+    if(!student){
+      stdInterest.students.push({ studentId: studentId, status: status });
+      await stdInterest.save();
+      res.json({message:`${status} Sucessfully`});
+    }
+    else{
     student.status = status;
+
     await stdInterest.save();
     res.json({ message: 'Status updated successfully' });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -420,16 +415,32 @@ app.get('/AddCertifications/download-certification/:uid/:certificationName', asy
     res.status(500).send('Server error');
   }
 });
+app.post('/api/update-password', async (req, res) => {
+  const { uid, password } = req.body;
+
+  try {
+      const user = await loginModel.findOne({ uid: uid });
+      if (user) {
+          user.password = password;
+          await user.save();
+          res.sendStatus(200);
+      } else {
+          res.status(404).send('User not found');
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('An error occurred while updating the password');
+  }
+});
 
 app.post('/api/compileAndRun', (req, res) => {
   const { uid, problemId, code, language, input } = req.body;
   compileAndRun(code, language, input)
     .then(output => res.json({ output }))
-    // .catch(error => res.json({ error: `Error: ${error}` })); // Uncomment this line to handle errors
 });
 
 app.post('/api/submit', async (req, res) => {
-  const { uid, problemId, problemName, code, language, testCases } = req.body; // Include language
+  const { uid, problemId, problemName, code, language, testCases } = req.body;
   let status = 'Accepted';
   for (let i = 0; i < testCases.length; i++) {
     const { input, output: expectedOutput } = testCases[i];
@@ -558,90 +569,6 @@ function compileAndRun(code, language, input) {
   });
 }
 
-
-
-// function compileAndRun(code, language, input) {
-//   return new Promise((resolve, reject) => {
-//     let process;
-//     if (language === 'python') {
-//       process = spawn('python', ['-c', code]);
-//     } else if (language === 'java') {
-//       fs.writeFileSync('Main.java', code);
-//       const compile = spawn('javac', ['Main.java']);
-//       compile.on('close', (code) => {
-//         if (code !== 0) {
-//           resolve('Compilation error');
-//           return;
-//         }
-//         process = spawn('java', ['Main']);
-//         runProcess(process, input, resolve, reject);
-//       });
-//       return;
-//     } else if (language === 'cpp') {
-//       fs.writeFileSync('main.cpp', code);
-//       const compile = spawn('g++', ['main.cpp', '-o', 'main']);
-//       compile.on('close', (code) => {
-//         if (code !== 0) {
-//           console.log(code);
-//           resolve('Compilation error');
-//           return;
-//         }
-//         process = spawn('./main');
-//         runProcess(process, input, resolve, reject);
-//       });
-//       return;
-//     } else {
-//       resolve('Unsupported language');
-//       return;
-//     }
-//     runProcess(process, input, resolve, reject);
-//   });
-// }
-
-// function compileAndRun(code, language, input) {
-//   return new Promise((resolve, reject) => {
-//     let process;
-//     const tempDir = os.tmpdir();
-//     const tempFile = path.join(tempDir, `temp${Date.now()}`);
-
-//     if (language === 'python') {
-//       fs.writeFileSync(`${tempFile}.py`, code);
-//       process = spawn('python', [`${tempFile}.py`]);
-//     } else if (language === 'java') {
-//       fs.writeFileSync(`${tempFile}.java`, code);
-//       const compile = spawn('javac', [`${tempFile}.java`]);
-//       compile.on('close', (code) => {
-//         if (code !== 0) {
-//           resolve('Compilation error');
-//           return;
-//         }
-//         process = spawn('java', ['-cp', tempDir, path.basename(tempFile)]);
-//         runProcess(process, input, resolve, reject);
-//       });
-//       return;
-//     } else if (language === 'cpp') {
-//       fs.writeFileSync(`${tempFile}.cpp`, code);
-//       const compile = spawn('g++', [`${tempFile}.cpp`, '-o', `${tempFile}.out`]);
-//       compile.on('close', (code) => {
-//         if (code !== 0) {
-//           resolve('Compilation error');
-//           return;
-//         }
-//         process = spawn(`${tempFile}.out`);
-//         runProcess(process, input, resolve, reject);
-//       });
-//       return;
-//     } else if (language === 'javascript') {
-//       fs.writeFileSync(`${tempFile}.js`, code);
-//       process = spawn('node', [`${tempFile}.js`]);
-//     } else {
-//       resolve('Unsupported language');
-//       return;
-//     }
-//     runProcess(process, input, resolve, reject);
-//   });
-// }
-
 function runProcess(process, input, resolve, reject) {
   let output = '';
   let errorOutput = '';
@@ -740,7 +667,7 @@ app.post('/add-project/:uid', async (req, res) => {
 app.delete('/delete-project/:uid', async (req, res) => {
   try {
       const { uid } = req.params;
-      const { projectTitle, projectObj, projectURL } = req.body; // assuming you're sending these in the request body
+      const { projectTitle, projectObj, projectURL } = req.body;
 
       const project = await stdProjectModel.findOne({ uid: uid });
       if (!project) {
@@ -751,7 +678,6 @@ app.delete('/delete-project/:uid', async (req, res) => {
       const indexObj = project.projectObj.indexOf(projectObj);
       const indexURL = project.projectURL.indexOf(projectURL);
 
-      // Ensure the project exists in all arrays before deleting
       if (indexTitle !== -1 && indexObj !== -1 && indexURL !== -1) {
           project.projectTitle.splice(indexTitle, 1);
           project.projectObj.splice(indexObj, 1);
@@ -767,10 +693,10 @@ app.delete('/delete-project/:uid', async (req, res) => {
 });
 
 
-// app.use(express.static(path.join(__dirname, "./front-end/build")));
+// app.use(express.static(path.join(__dirname, "./client/build")));
 
 // app.get("*", function (req, res) {
-//   res.sendFile(path.join(__dirname, "./front-end/build/index.html"));
+//   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 // });
 
 const uri = process.env.MONGO_DB;
