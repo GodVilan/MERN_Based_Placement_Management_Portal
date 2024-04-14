@@ -1,0 +1,9 @@
+Step 1: Firstly, open the project folder in vs code.
+Step 2: Open the terminal and split the terminal into two parts.
+Step 2.1: In the first terminal, move to back-end folder by running the command “cd back-end’.
+Step 2.2: In the second terminal, move to front-end folder by running the command “cd front-end’.
+Step 3: Now do the following 2 steps.
+Step 3.1: Run the command “nodemon server.js” in the back-end directory.
+Step 3.2: After running the backend server, run the command “npm start” in the front-end
+directory
+Step 4: Now the application will run on the localhost server “http://localhost:3000/”

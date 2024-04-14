@@ -17,26 +17,26 @@ function StudentBranch() {
           setStudents(sortedStudents);
     }, [stream]);
 
-    // const binarySearch = (students, uid) => {
-    //     let start = 0;
-    //     let end = students.length - 1;
+    const binarySearch = (students, uid) => {
+        let start = 0;
+        let end = students.length - 1;
 
-    //     while (start <= end) {
-    //         let mid = Math.floor((start + end) / 2);
+        while (start <= end) {
+            let mid = Math.floor((start + end) / 2);
 
-    //         if (students[mid].uid === uid) {
-    //             return [students[mid]];
-    //         } else if (students[mid].uid < uid) {
-    //             start = mid + 1;
-    //         } else {
-    //             end = mid - 1;
-    //         }
-    //     }
-    //     return [];
-    // }
-    const filteredStudents = students.filter(student => student.uid.includes(search));
+            if (students[mid].uid === uid) {
+                return [students[mid]];
+            } else if (students[mid].uid < uid) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+        return [];
+    }
+    // const filteredStudents = students.filter(student => student.uid.includes(search));
 
-    // const filteredStudents = search ? binarySearch(students, search) : students;
+    const filteredStudents = search ? binarySearch(students, search) : students;
 
     return (
         <div>

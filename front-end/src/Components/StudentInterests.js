@@ -24,6 +24,7 @@ function StudentInterests() {
         <div>
             <AdminHeader/>
             <Container>
+            <h1 style = {{ marginTop: "20px" }}> Welcome to Companies Catalog </h1>
                 <Row xs={1} md={3}>
                     {companies.map((company, index) => (
                         <Col key={index}>

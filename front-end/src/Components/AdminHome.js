@@ -15,6 +15,7 @@ function AdminHome() {
             <div>
                 <AdminHeader/>
                 <Container>
+                    <h1 style = {{ marginTop: "20px" }}> Welcome to Department Catalog </h1>
                     <Row xs={1} md={3}>
                             <Col>
                             <Card style={{borderColor: "black", height: "154px", borderWidth: "2px", backgroundColor: "#f8f9fa"}} className='mb-4'>
@@ -39,6 +40,33 @@ function AdminHome() {
                                 <Card.Body>
                                 <Link className="link" to={`/students/${IT}`}>
                                     <Card.Title style={{color: "#1F0954"}}>Information Technology</Card.Title>
+                                </Link>
+                                </Card.Body>
+                            </Card>
+                            </Col>
+                            <Col>
+                            <Card style={{borderColor: "black", height: "154px", borderWidth: "2px", backgroundColor: "#f8f9fa"}} className='mb-4'>
+                                <Card.Body>
+                                <Link className="link" to={`/students/${CSM}`}>
+                                    <Card.Title style={{color: "#1F0954"}}>Computer Science & Engineering (AI&ML)</Card.Title>
+                                </Link>
+                                </Card.Body>
+                            </Card>
+                            </Col>
+                            <Col>
+                            <Card style={{borderColor: "black", height: "154px", borderWidth: "2px", backgroundColor: "#f8f9fa"}} className='mb-4'>
+                                <Card.Body>
+                                <Link className="link" to={`/students/${CSC}`}>
+                                    <Card.Title style={{color: "#1F0954"}}>Computer Science & Engineering (CyberSecurity)</Card.Title>
+                                </Link>
+                                </Card.Body>
+                            </Card>
+                            </Col>
+                            <Col>
+                            <Card style={{borderColor: "black", height: "154px", borderWidth: "2px", backgroundColor: "#f8f9fa"}} className='mb-4'>
+                                <Card.Body>
+                                <Link className="link" to={`/students/${CSD}`}>
+                                    <Card.Title style={{color: "#1F0954"}}>Computer Science & Engineering (Data Science)</Card.Title>
                                 </Link>
                                 </Card.Body>
                             </Card>
